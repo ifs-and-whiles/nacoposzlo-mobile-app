@@ -1,0 +1,17 @@
+@import './../../styles-utils/action-toolbar.scss';
+@import './../../styles-utils/text-color.scss';
+@import './../../styles-utils/buttons.scss';
+@import './../../styles-utils/header-toolbar.scss';
+@import "./../../styles-utils/content.scss";
+
+.confirm-btn {	
+    --box-shadow: none;
+    --ion-color-base: white !important;
+    margin: 0px;
+    font-size: 16px;
+}
+
+.description {
+    @extend .text-medium;
+    font-size: 13px;
+}

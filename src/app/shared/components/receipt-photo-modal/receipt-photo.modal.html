@@ -1,0 +1,37 @@
+<ion-header class="ion-no-border">
+	<ion-toolbar class="header-toolbar header-toolbar--shade">
+		<ion-buttons slot="start">
+			<ion-button class="header-toolbar__btn" (click)="cancel()">
+				<ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
+			</ion-button>
+		</ion-buttons>		
+
+		<ion-title class="header-toolbar__title header-toolbar__title--with-icon" (click)="cancel()">
+			<span>Zdjęcie paragonu</span>
+        </ion-title>
+        
+        <ion-buttons slot="end">
+			<app-network-icon></app-network-icon>            
+            
+            <ion-spinner *ngIf="isLoading" 
+                class="mr1" 
+                name="lines" 
+                color="primary">
+            </ion-spinner>
+
+            <ion-button 
+                (click)="exportImage()" 
+                *ngIf="!isLoading" >   
+
+                <ion-icon
+                    slot="icon-only"                     
+                    name="share-social-outline">
+                </ion-icon>
+			</ion-button>
+		</ion-buttons>
+	</ion-toolbar>
+</ion-header>
+	  
+<ion-content class="background-shade">
+    <canvas #canvas style="width: 100%; height: 100%;"></canvas>  
+</ion-content>

@@ -1,0 +1,29 @@
+.header-toolbar {
+
+    &--shade {
+        --background: var(--background-shade);
+    }
+    
+    &__title {
+        padding-left: 20px;
+        font-size: 20px;
+        font-weight: bold;
+
+        &--with-icon {
+            padding-left: 0px;
+        }
+
+        &--centered {
+            text-align: center;
+        }
+    }   
+
+    &__btn {
+        color: var(--ion-color-primary);
+    }
+
+    &__reset-btn {
+        color: var(--ion-color-primary);
+        font-size: 15px;
+    }
+}

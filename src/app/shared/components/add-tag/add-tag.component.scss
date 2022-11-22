@@ -1,0 +1,15 @@
+@import "./../../styles-utils/tag-base.scss";
+@import "./../../../../theme/variables.scss";
+
+.tag {    
+    @extend .tag-base;
+
+    border: dashed #11c2aa;
+    background: white;
+    color: #11c2aa;
+    font-size: 16px;
+
+    &--small {
+        font-size: 12px;
+    }
+}

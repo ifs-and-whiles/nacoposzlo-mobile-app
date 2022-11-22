@@ -1,0 +1,13 @@
+@import "./../../../../theme/variables.scss";
+@import "./../../styles-utils/sliding.scss";
+@import "./../../styles-utils/action-toolbar.scss";
+@import "./../../styles-utils/content.scss";
+@import './../../styles-utils/header-toolbar.scss';
+
+.sort-btn {
+    margin-right: 10px;
+
+    &__icon {
+        font-size: 20px;
+    }
+}

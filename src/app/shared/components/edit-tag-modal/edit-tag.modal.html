@@ -1,0 +1,107 @@
+<ion-header class="ion-no-border">
+    <ion-toolbar class="header-toolbar header-toolbar--shade">   
+        <ion-title class="header-toolbar__title header-toolbar__title--centered" (click)="cancel()">
+            <span>Edytuj kategorię</span>
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
+        
+<ion-content class="background-shade edit-tag">
+    <form>
+        <ion-grid class="px2">
+            <ion-row>
+                <ion-col class="edit-tag__item-col p0">
+                    <div *ngIf="!tagToEdit.name && !wasColorClicked" 
+                        class="edit-tag__placeholder">
+                        podaj nazwę
+                    </div>
+
+                    <div *ngIf="!tagToEdit.name && wasColorClicked" 
+                        class="edit-tag__placeholder"
+                        [style.color]="tagToEdit.color"
+                        [style.border-color]="tagToEdit.color">
+                        podaj nazwę
+                    </div>    
+    
+                    <app-tag *ngIf="tagToEdit.name"
+                        [big]="1"
+                        [allowClear]="0"
+                        [tag]="tagToEdit.name"    
+                        [forceColor]="tagToEdit.color"
+                        (click)="randomizeColor()">
+                    </app-tag>    
+                </ion-col>
+            </ion-row>   
+
+            <ion-row class="pt2">
+                <ion-col>
+                    <ion-item class="validation">
+                        <ion-label color="medium" position="floating" 
+                            class="validation__label"
+                            [class.validation__label--invalid]="nameInput.control.status === 'INVALID' && nameInput.control.touched">
+                            Nazwa
+                            <span class="required-asterisk">*</span>
+                        </ion-label>                           
+    
+                        <ion-input #nameInput="ngModel"
+                            class="validation__input"
+                            [class.validation__input--invalid]="nameInput.control.status === 'INVALID' && nameInput.control.touched"
+                            placeholder="Uzupełnij nazwę"
+                            type="text" 
+                            inputmode="text" 
+                            name="name" 
+                            clear-input=true 
+                            [(ngModel)]="tagToEdit.name"
+                            appHideKeyboardOnEnter
+                            required>
+                        </ion-input>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+    
+            <ion-row class="pt2"
+                [class.hide-on-small-screen]="doesAlreadyExist()">
+                <ion-col>
+                    <app-color-palette
+                        class="edit-tag__colors"
+                        (colorChange)="onColorChange($event)">
+                    </app-color-palette>
+                </ion-col>
+            </ion-row>
+
+            <ion-row class="mt1 edit-tag__error" [hidden]="!doesAlreadyExist()">
+                <ion-col>
+                    <span class="text-danger">Taka kategoria już istnieje</span>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+    </form>
+    
+</ion-content>
+
+<ion-footer> 
+	<ion-toolbar class="action-toolbar">
+		<ion-buttons class="action-toolbar__container">            
+            <ion-button *ngIf="canDelete"
+                class="action-toolbar__btn action-toolbar__btn--danger"
+                expand="full" 
+                (click)="delete()">
+                
+				<div class="m1">
+					<span class="action-toolbar__label-only">Usuń</span>
+				</div>
+			</ion-button>
+
+            <ion-button 
+                class="action-toolbar__btn action-toolbar__btn--green" 
+                expand="full" 
+                (click)="save()"
+                [disabled]="doesAlreadyExist()">
+
+				<div class="m1">
+					<span class="action-toolbar__label-only">Zapisz</span>
+				</div>
+			</ion-button>
+		</ion-buttons>
+	</ion-toolbar>
+</ion-footer>

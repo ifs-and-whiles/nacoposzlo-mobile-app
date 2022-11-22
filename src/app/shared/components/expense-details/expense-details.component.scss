@@ -1,0 +1,48 @@
+
+@import "./../../styles-utils/validation.scss";
+@import './../../styles-utils/buttons.scss';
+
+.details {
+    background-color: #FFFFFF;
+    border-radius: 15px;
+    
+    &__delete-row {
+        position: absolute;
+        z-index: 2;
+        right: 0px;
+        top: 0px;
+    }
+
+    &__tags {
+        --inner-border-width: 0 0 0 0;
+        word-break: break-all;
+    }
+
+    &__tags-label {
+        margin-left: 16px;
+    }
+
+    &__edit-tags-btn {	
+        --box-shadow: none;
+        --ion-color-base: white !important;
+        margin: 0px;
+        font-size: 12px;
+    }
+
+    &__name {
+        position: relative;
+    }
+}
+
+.tag-action-btn {
+    text-transform: none;
+    --background: white;
+    font-size: 15px;
+    border: dashed #11c2aa;
+    --border-radius: 15px;    
+    border-radius: 15px;
+    border-width: 2px;
+    color: #11c2aa;
+    --box-shadow: none;
+    font-weight: bold;
+}

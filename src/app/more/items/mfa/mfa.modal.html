@@ -1,0 +1,227 @@
+<ion-header class="ion-no-border">
+    <ion-toolbar class="header-toolbar header-toolbar--shade">
+
+        <ion-buttons slot="start">
+            <ion-button class="header-toolbar__btn" (click)="cancel()">
+                <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+    
+        <ion-title class="header-toolbar__title header-toolbar__title--with-icon" (click)="cancel()">
+            <span>Uwierzytelnianie 2FA</span>
+        </ion-title>
+        
+        <ion-buttons slot="end">
+			<app-network-icon></app-network-icon>
+		</ion-buttons>
+    </ion-toolbar>
+</ion-header>
+        
+<ion-content class="background-shade report">
+    <div> 
+        <div *ngIf="!isMfaSetupOn">
+            <ion-card *ngIf="!isMfaOn" class="menu-card menu-card--red mt3 mx2">
+                <ion-card-content class="menu-card__content">
+                   <ion-grid>
+                        <ion-row>
+                            <ion-col class="p0 mt1 menu-card__info-label">
+                                Uwierzytelnianie dwuskładnikowe <b>(2FA)</b>:
+                            </ion-col>
+                        </ion-row>
+    
+                        <ion-row>
+                            <ion-col class="p0 menu-card__value-label">
+                                WYŁĄCZONE
+                            </ion-col>
+                        </ion-row>
+    
+                        <ion-row>
+                            <ion-col class="p0 mt2 mb2 menu-card__info-label">
+                                Dla większego bezpieczeństwa Twojego konta zalecamy włączenie uwierzytelniania dwuskładnikowego. 
+                            </ion-col>
+                        </ion-row>
+                   </ion-grid>
+                </ion-card-content>
+            </ion-card>
+
+            <ion-card *ngIf="!isMfaOn" class="menu-card mt3 mx2">
+                <ion-card-content class="menu-card__content">
+                   <ion-grid>
+                        <ion-row>
+                            <ion-col class="p0 mt1 menu-card__title-label">
+                                Czym jest uwierzytelnianie dwuskładnikowe (2FA)?
+                            </ion-col>
+                        </ion-row>
+    
+                        <ion-row>
+                            <ion-col class="p0 mt2 mb2 menu-card__info-label">
+                                2FA jest to dodatkowa warstwa zabezpieczająca Twoją aplikację.
+                                Po włączeniu 2FA aby zalogować się do aplikacji poza 
+                                adresem e-mail oraz hasłem wymagany będzie także dodatkowy kod.  
+
+                                <br><br>
+                                Kod ten może zostać wygenerenerowany przez jedną z wielu dostępnych na rynku
+                                aplikacji. 
+                                                                
+                                <br><br>
+                                My polecamy następujące: <br>
+
+                                <a [routerLink]="" (click)="openGoogleAuthenticator()">Google Authenticator</a> <br>
+                                <a [routerLink]="" (click)="openLastPassAuthenticator()">LastPass Authenticator</a>
+                            </ion-col>
+                        </ion-row>
+                   </ion-grid>
+                </ion-card-content>
+            </ion-card>
+    
+            <ion-card *ngIf="isMfaOn" class="menu-card menu-card--green mt3 mx2">
+                <ion-card-content class="menu-card__content menu-card__content--big">
+                   <ion-grid>
+                        <ion-row>
+                            <ion-col class="p0 mt1 menu-card__info-label">
+                                Uwierzytelnianie dwuskładnikowe <b>(2FA)</b>:
+                            </ion-col>
+                        </ion-row>
+    
+                        <ion-row>
+                            <ion-col class="p0 menu-card__value-label">
+                                WŁĄCZONE
+                            </ion-col>
+                        </ion-row>
+    
+                        <ion-row>
+                            <ion-col class="p0 mt2 mb2 menu-card__info-label">
+                                Twoje konto jest zabezpieczone uwierzytelnianiem dwuskładnikowym. 
+                            </ion-col>
+                        </ion-row>
+                   </ion-grid>
+                </ion-card-content>
+            </ion-card>
+    
+            <div *ngIf="isMfaOn"
+                class="mx2 mt3 turn-off-link-container">
+                <a class="turn-off-link" [routerLink]="" (click)="tryTurnOffMfa()">Wyłącz 2FA</a>
+            </div>
+
+            <div *ngIf="isMfaOn" class="mx2 mt2 info-label text-medium">
+                Po wyłączeniu Twoja obecna konfiguracja 2FA przestanie działać,
+                a ponowne jej włączenie będzie wymagało skonfigurowania aplikacji z kodami jednorazowymi od początku
+            </div>
+        </div>
+
+        <div class="mx2 mt1" *ngIf="isMfaSetupOn">
+            <ion-card class="menu-card mx0">
+                <ion-card-content class="menu-card__content menu-card__content--big">
+                   <ion-grid>
+                        <ion-row>
+                            <ion-col class="p0 mt1 menu-card__info-label">
+                                Skopiuj <b>Secret Key</b> (wystarczy kliknąć) i wprowadź do aplikacji generującej kody jednorazowe 
+                                albo zeskanuj QR Code.
+                            </ion-col>
+                        </ion-row>
+
+                        <ion-row>
+                            <ion-item class="mt2 mb2 secret-key">
+                                <ion-label color="medium" position="floating">
+                                    Secret Key
+                                </ion-label>                           
+                
+                                <ion-input
+                                    type="text" 
+                                    inputmode="text" 
+                                    name="secret"
+                                    [ngModel]="totpSecret"
+                                    (click)="copySecretToClipboard()"
+                                    readonly>
+                                </ion-input>
+                            </ion-item>
+                        </ion-row>
+                   </ion-grid>
+                </ion-card-content>
+            </ion-card>         
+
+            <ion-card *ngIf="errorCode" class="mx0 mt2 menu-card menu-card--danger">
+                <ion-card-content class="menu-card__content">
+                    <ion-grid>
+                        <ion-row *ngIf="errorCode === 'EnableSoftwareTokenMFAException'">
+                            <ion-col>
+                                <ion-label>Podany kod jest niepoprawny.</ion-label>
+                            </ion-col>
+                        </ion-row>
+
+                        <ion-row *ngIf="errorCode === 'InvalidParameterException'">
+                            <ion-col>
+                                <ion-label>Podany kod ma zły format.</ion-label>
+                            </ion-col>
+                        </ion-row>
+                    </ion-grid>
+                 </ion-card-content>
+            </ion-card>
+
+            <ion-card class="menu-card mx0 mt2">
+                <ion-card-content class="menu-card__content menu-card__content--big">
+                   <ion-grid>
+                        <ion-row>
+                            <ion-col class="p0 mt1 menu-card__info-label">
+                                Wprowadź jednorazowy kod wygenerowany w Twojej aplikacji (np. <b>Google Authenticator</b>) i zatwierdź
+                            </ion-col>
+                        </ion-row>
+
+                        <ion-row>
+                            <ion-item class="mt2 mb2 validation one-time-code">
+                                <ion-label 
+                                    class="placeholder"
+                                    position="floating"
+                                    [class.placeholder--invalid]="oneTimeCodeTxt.touched && oneTimeCodeTxt.invalid">
+                                    Kod jednorazowy
+                                </ion-label>
+                
+                                <ion-input 
+                                    name="one-time-code" 
+                                    type="number" 
+                                    [(ngModel)]="oneTimeCode"
+                                    required
+                                    #oneTimeCodeTxt="ngModel">
+                                </ion-input>
+                            </ion-item>
+                        </ion-row>
+                   </ion-grid>
+                </ion-card-content>
+            </ion-card>
+
+            <ion-button class="qr-code-btn" fill="outline" color="medium" (click)="showQrCode()">
+                Pokaż QR Code
+            </ion-button>
+        </div>
+    </div>
+</ion-content>
+
+<ion-footer *ngIf="!isMfaSetupOn && !isMfaOn"> 
+    <ion-toolbar class="action-toolbar">
+		<ion-buttons class="action-toolbar__container">
+            <ion-button
+                class="action-toolbar__btn action-toolbar__btn--green" 
+                expand="full" 
+                (click)="turnOnMfa()">
+				<div class="m1">
+					<span class="action-toolbar__label-only">Włącz 2FA</span>
+				</div>
+            </ion-button>
+		</ion-buttons>	
+	</ion-toolbar>
+</ion-footer>
+
+<ion-footer *ngIf="isMfaSetupOn"> 
+    <ion-toolbar class="action-toolbar">
+		<ion-buttons class="action-toolbar__container">
+			<ion-button
+                class="action-toolbar__btn action-toolbar__btn--green" 
+                expand="full" 
+                (click)="tryConfirmMfa()">
+				<div class="m1">
+					<span class="action-toolbar__label-only">Zatwierdź</span>
+				</div>
+            </ion-button>
+		</ion-buttons>	
+	</ion-toolbar>
+</ion-footer>

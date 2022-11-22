@@ -1,0 +1,21 @@
+@import "./../../../theme/variables.scss";
+
+.text-primary {
+    color: var(--ion-color-primary) !important;
+}
+
+.text-success {
+    color: var(--ion-color-success) !important;
+}
+
+.text-danger {
+    color: var(--ion-color-danger) !important;
+}
+
+.text-medium {
+    color: var(--ion-color-medium) !important;
+}
+
+.text-white {
+    color: white !important;
+}

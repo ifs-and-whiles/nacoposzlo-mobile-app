@@ -1,0 +1,18 @@
+@import "./../../../theme/variables.scss";
+
+.validation {
+    &__label {
+        &--invalid {
+            color: var(--ion-color-danger) !important;
+        }
+    }
+
+    &__input {
+        &--invalid {
+            color: var(--ion-color-danger);
+            font-weight: 600;
+            --placeholder-opacity: 1;
+            opacity: 0.5;
+        }
+    }
+}

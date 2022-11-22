@@ -1,0 +1,31 @@
+<ion-grid class="month-selector p0">
+    <ion-row class="mb0">
+        <ion-col class="ion-text-center">
+            <span class="info-label text-medium">{{selectedMonth.year}}</span>
+        </ion-col>
+    </ion-row>
+
+    <ion-row class="m0">
+        <ion-col class="ion-text-center p0 month-selector__month">
+            <ion-button 
+                [style.visibility]="previousMonth ? 'visible' : 'hidden'"
+                color="light" 
+                class="month-selector__btn" 
+                (click)="selectPreviousMonth()">
+
+                <ion-icon slot="icon-only" name="caret-back-outline"></ion-icon>
+            </ion-button>
+                      
+            <ion-label class="ion-text-capitalize">{{selectedMonth.name}}</ion-label>
+
+            <ion-button 
+                [style.visibility]="nextMonth ? 'visible' : 'hidden'"
+                color="light" 
+                class="month-selector__btn" 
+                (click)="selectNextMonth()">
+                
+                <ion-icon slot="icon-only" name="caret-forward-outline"></ion-icon>
+            </ion-button>
+        </ion-col>
+    </ion-row>
+</ion-grid>

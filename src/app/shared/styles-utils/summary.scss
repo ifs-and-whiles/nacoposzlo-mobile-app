@@ -1,0 +1,51 @@
+@import "./../../../theme/variables.scss";
+
+.summary {   
+	&__card {
+        z-index: 2;
+		margin-top: 0px;
+        margin-bottom: 0px;
+        margin-left: 0px;
+        margin-right:0px;
+
+		border-radius: 20px;
+
+		padding-left: 20px;
+		padding-right: 20px;
+		padding-top: 5px;
+		padding-bottom: 5px;
+				
+		box-shadow: 1px 1px 3px 2px rgba(0,0,0,0.1);
+		color: var(--info-font-color);
+        background-color: white;
+        
+        min-height: 56px;
+        text-align: center;
+	}
+
+	&__label {
+		font-size: 13px;
+		font-weight: 500;
+		margin-bottom: 3px;
+	}
+
+	&__value {
+		font-size: 15px;
+    	font-weight: 600;
+	}
+
+    &__section {    
+        display: inline-block;
+        text-align: left;
+        margin-top: 5px;       
+        margin-bottom: 5px;
+
+        &--left {
+            margin-right: 20px;
+        }
+
+        &--right {
+            margin-left: 20px;
+        }
+    }
+}

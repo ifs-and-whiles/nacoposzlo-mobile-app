@@ -1,0 +1,12 @@
+<div class="tag" 
+	[style.background-color]= "_color" 
+	[class.tag--big]="big" 
+	[class.tag--medium]="medium">
+
+	<span *ngIf="allowClear" (click)="onClear.emit()">
+		{{_tag}}
+		<a class="tag__remove-btn" (click)="onClear.emit()"></a>
+	</span>  
+
+	<span *ngIf="!allowClear">{{_tag}}</span> 
+</div>	

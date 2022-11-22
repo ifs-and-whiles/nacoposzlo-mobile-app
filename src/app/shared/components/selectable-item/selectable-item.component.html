@@ -1,0 +1,18 @@
+<div class="selectable-item">
+    <div class="selectable-item__date-col" (click)="onIconClick()">
+        <app-date-square class="selectable-item__date" #dateSquareEl
+            [hidden]="isSelected"
+            [unixTimestamp]="dateUnixTimestamp">
+        </app-date-square>
+
+        <ion-icon 
+            name="checkmark-circle-outline" 
+            class="selectable-item__icon"
+            [hidden]="!isSelected">
+        </ion-icon>
+    </div>
+
+    <div class="selectable-item__content-col" (click)="onItemClick()">
+        <ng-container *ngTemplateOutlet="itemTemplate"></ng-container>
+    </div>
+</div>

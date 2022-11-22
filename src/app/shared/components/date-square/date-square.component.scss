@@ -1,0 +1,10 @@
+@import "./../../styles-utils/info-label.scss";
+@import "./../../styles-utils/text-color.scss";
+
+.date-square {
+    display: inline-block;
+
+    &__label {
+        text-transform: lowercase !important;
+    }
+}

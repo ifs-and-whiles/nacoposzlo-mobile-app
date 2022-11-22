@@ -1,0 +1,203 @@
+<ion-card class="details pb2">
+	<form>
+		<ion-grid class="pt2">
+			<ion-row class="p0 m0 details__delete-row">
+                <ion-col class="p0 m0">
+					<ion-button 
+						[hidden]="hideCopy" 
+						color="light" 
+						class="pt0 text-btn text-btn--icon-only ion-float-right" 
+						(click)="onCopy()">	
+						<ion-icon slot="icon-only" color="medium" name="copy-outline"></ion-icon>
+					</ion-button>
+                </ion-col>
+                
+				<ion-col class="p0 m0">
+					<ion-button 
+						[hidden]="hideDelete" 
+						color="light" 
+						class="pt0 text-btn text-btn--icon-only ion-float-right" 
+						(click)="onDelete()">	
+						<ion-icon slot="icon-only" color="danger" name="trash-outline"></ion-icon>
+					</ion-button>
+				</ion-col>
+			</ion-row>
+
+			<ion-row class="mb2">
+				<ion-col class="pt0">
+					<ion-item class="validation detaisl__name">
+						<ion-label color="medium" position="floating" 
+							class="validation__label"
+							[class.validation__label--invalid]="nameInput.control.status === 'INVALID' && (nameInput.dirty || nameInput.touched)">
+							Nazwa
+
+							<span class="required-asterisk"            
+                                [class.required-asterisk--invalid]="nameInput.control.status === 'INVALID' && (nameInput.dirty || nameInput.touched)">
+                                *
+                            </span>
+						</ion-label>                           
+
+						<ion-input 
+                            #nameInputCtrl
+                            #nameInput="ngModel"
+							class="validation__input"
+							[class.validation__input--invalid]="nameInput.control.status === 'INVALID' && (nameInput.dirty || nameInput.touched)"
+							placeholder="Uzupełnij nazwę"
+							type="text" 
+							inputmode="text" 
+							name="name" 
+							clear-input=true 
+							[(ngModel)]="name" 
+							(ionChange)="onNameChange()"
+                            (ionFocus)="isNameFocused = true"
+							(ionBlur)="onNameBlur()"
+                            (keyup.enter)="tryFocusNextEmpty('name')"
+							required>
+						</ion-input>
+					</ion-item>  
+                    
+                    <app-name-suggestions
+                        [namePhrase]="name"
+                        [isVisible]="isNameFocused"
+                        (suggestionSelect)="useSuggestion($event)">
+                    </app-name-suggestions>
+				</ion-col>				
+			</ion-row>
+	
+			<ion-row class="mb2">
+				<ion-col size="6">
+					<ion-item class="validation">
+						<ion-label color="medium" position="floating"
+							class="validation__label"
+							[class.validation__label--invalid]="dateInput.control.status === 'INVALID' && (dateInput.dirty || dateInput.touched)">
+							Data zakupów
+							<span class="required-asterisk">*</span>
+						</ion-label>
+						
+						<ion-datetime 
+                            #dateInputCtrl
+                            #dateInput="ngModel"
+							class="validation__input"
+							[class.validation__input--invalid]="dateInput.control.status === 'INVALID' && (dateInput.dirty || dateInput.touched)"
+							[monthNames]="monthNames"
+							[monthShortNames]="monthShortNames"
+							pickerFormat="DD MMMM YYYY" 
+							placeholder="Uzupełnij datę"
+							displayFormat="DD-MM-YYYY" 
+							[(ngModel)]="date"  
+							(ionChange)="onDateChange()"
+							name="shoppingDate" 
+							required="1" 
+							cancel-text="Anuluj"
+							done-text="Wybierz">
+						</ion-datetime>
+					</ion-item>		
+				</ion-col>
+	
+				<ion-col size="6">
+                    <app-money-input
+                        #amountInputCtrl
+                        inputStyle="margin-bottom:3px; margin-top:2px"
+                        name="amount"
+                        label="Kwota"
+                        placeholder="Uzupełnij"
+                        [value]="amount"
+                        (appChange)="onAmountChange($event)"
+                        (appFocus)="isAmountFocused = true"
+                        (appBlur)="onAmountBlur()"
+                        required="true">                        
+                    </app-money-input>
+				</ion-col>
+			</ion-row>
+	
+			<ion-row class="mb2">
+				<ion-col size="6">
+					<ion-item class="validation">
+						<ion-label color="medium" position="floating" class="validation__label"
+							[class.validation__label--invalid]="quantityInput.control.status === 'INVALID' && (quantityInput.dirty || quantityInput.touched)">
+							Ilość
+						</ion-label>
+	
+						<ion-input                        
+                            #quantityInputCtrl 
+                            #quantityInput="ngModel"
+							class="validation__input"
+							[class.validation__input--invalid]="quantityInput.control.status === 'INVALID' && (quantityInput.dirty || quantityInput.touched)"
+							type="text" 
+							inputmode="decimal" 
+							[(ngModel)]="quantity"
+							(ionChange)="onQuantityChange()"
+                            (ionFocus)="isQuantityFocused = true"
+                            (ionBlur)="isQuantityFocused = false"
+							name="quantity"
+							appNumerical>
+						</ion-input>
+					</ion-item>
+				</ion-col>
+	
+				<ion-col size="6">
+                    <app-money-input                        
+                        #unitPriceInputCtrl
+                        name="unitPrice"
+                        label="Cena"
+                        [value]="unitPrice"
+                        (appChange)="onUnitPriceChange($event)"
+                        (appFocus)="isUnitPriceFocused = true"
+                        (appBlur)="onUnitPriceBlur()"
+                        (appKeyUpEnter)="tryFocusNextEmpty(null)">                        
+                    </app-money-input>
+				</ion-col>
+			</ion-row>
+	
+			<ion-row class="ion-align-items-center">
+				<ion-col>
+					<ion-label class="details__tags-label" color="medium">Kategorie</ion-label>				
+				</ion-col>				
+			</ion-row>
+	
+			<ion-row *ngIf="tags && tags.length" class="mb2">
+				<ion-col>
+					<ion-item class="details__tags">
+                        <app-tag-list-read-only 
+                            [tagIds]="tags"
+                            (click)="modifyTags()">                            
+                        </app-tag-list-read-only>
+					</ion-item>
+				</ion-col>
+			</ion-row>
+	
+			<ion-row *ngIf="!tags || !tags.length" class="mb2">
+				<ion-col class="p0 pl1">
+					<ion-item class="details__tags">
+                        <app-no-category-tag
+                            (click)="modifyTags()">                            
+                        </app-no-category-tag>
+					</ion-item>
+				</ion-col>
+			</ion-row>
+
+			<ion-row>
+				<ion-col>
+					<ion-button class="ml2 tag-action-btn" (click)="modifyTags()">				
+						<span *ngIf="!tags || !tags.length"  class="text-primary">przypisz kategorie</span>
+						<span *ngIf="tags && tags.length"  class="text-primary">edytuj kategorie</span>
+
+                        <ion-icon *ngIf="!tags || !tags.length"  
+                            color="primary" 
+                            slot="start" 
+                            name="add-outline">
+                        </ion-icon>
+					</ion-button>
+				</ion-col>				
+			</ion-row>
+
+			<ion-row *ngIf="canShowReceipt">
+				<ion-col>
+					<ion-button color="light" class="ml2 action-btn" (click)="onShowReceipt()">				
+						<span class="text-primary">Pokaż paragon</span>
+					</ion-button>
+				</ion-col>				
+			</ion-row>
+		</ion-grid>
+	</form>
+</ion-card>

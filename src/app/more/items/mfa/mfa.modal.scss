@@ -1,0 +1,50 @@
+@import "./../../../shared/styles-utils/content.scss";
+@import "./../../../shared/styles-utils/header-toolbar.scss";
+@import "./../../../shared/styles-utils/menu-card.scss";
+@import "./../../../../theme/variables.scss";
+@import "./../../../shared/styles-utils/action-toolbar.scss";
+@import "./../../../shared/styles-utils/placeholder.scss";
+@import "./../../../shared/styles-utils/info-label.scss";
+
+
+.mfa-btn {
+    --border-radius: 15px;
+    text-transform: none;
+
+    &--green {
+        --background: linear-gradient(var(--background-gradient-green-first), var(--background-gradient-green-second));
+        color: var(--info-font-color);
+    }
+
+    &--red {
+        --background: linear-gradient(var(--background-gradient-red-first), var(--background-gradient-red-second));
+        color: white;
+    }
+}
+
+.secret-key {
+    width: 100%;
+    --border-radius: 15px;
+    --background: gainsboro;
+    --highlight-height: var(--ion-color-light-shade);
+}
+
+.one-time-code {
+    width: 100%;
+    border: solid 1px var(--ion-color-light-shade);
+}
+
+.qr-code-btn {
+    --border-radius: 15px;
+    color: var(--info-font-color);
+    text-transform: none;
+    width: 100%;
+}
+
+.turn-off-link-container {
+    text-align: center;
+}
+
+.turn-off-link {
+    color: var(--ion-color-medium);
+}

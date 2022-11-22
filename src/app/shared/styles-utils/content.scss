@@ -1,0 +1,35 @@
+.background-shade {
+    --background:  var(--background-shade);
+    background:  var(--background-shade);
+}
+
+.content-panel {	
+	border-top-left-radius: 20px;
+	border-top-right-radius: 20px;
+	box-shadow: 0 -5px 4px -5px rgba(0, 0, 0, 0.2);
+}
+
+.pull-up {
+	margin-top: -20px;
+}
+
+.empty-screen {
+	&__content {
+		position: absolute;
+        margin-bottom: 30px;
+        width: 100%;
+
+        &--vs-viewport {
+            bottom: 56px;
+        }
+
+        &--vs-ion-content {
+            bottom: 0px;
+        }
+
+        &--centered {
+            top: 50%;
+            transform: translateY(-50%);
+        }
+    }
+}

@@ -1,0 +1,33 @@
+@import "./../shared/styles-utils/header-toolbar.scss";
+@import "./../shared/styles-utils/content.scss";
+@import "./../shared/styles-utils/text-color.scss";
+@import "./../shared/styles-utils/filter.scss";
+@import "./../../theme/variables.scss";
+@import "./../shared/styles-utils/summary.scss";
+
+.date-range {
+    &__btn {
+        --box-shadow: none;
+        --ion-color-base: var(--background-shade) !important;
+        margin: 0px;
+        font-size: 16px;
+        text-transform: lowercase;
+    }
+}
+
+.expenses-panel {
+    @extend .content-panel;
+
+    padding-top: 15px;
+    background: white;
+}
+
+.amount-filter {
+    padding-left: 8px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-right: 8px;
+
+    font-size: 16px;
+    font-weight: 500;
+}

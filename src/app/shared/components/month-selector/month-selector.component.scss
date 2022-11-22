@@ -1,0 +1,16 @@
+@import "./../../../../theme/variables.scss";
+@import "./../../styles-utils/info-label.scss";
+@import "./../../styles-utils/text-color.scss";
+
+.month-selector {
+    &__month {
+        font-weight: 600;
+		font-size: 20px;
+    }
+
+    &__btn {
+        --box-shadow: none;
+        --ion-color-base: var(--background-shade) !important;
+        margin-top:-10px;
+    }
+}

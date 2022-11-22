@@ -1,0 +1,35 @@
+@import "./../../styles-utils/tag-base.scss";
+@import "./../../../../theme/variables.scss";
+
+.tag-arrow {
+    margin-bottom: -4px;
+    margin-left: -5px;
+    margin-right: -2px;
+    font-size: 16px;
+    color: var(--ion-color-medium-tint);
+    opacity: 0.25;
+    animation: blinker-arrow 1.5s ease-in-out 2;
+    display: inline-block;
+}
+
+@keyframes blinker-arrow {
+    50% {
+      opacity: 0.05;
+    }
+}
+
+.tag {    
+    @extend .tag-base;
+
+    border: dashed black;
+    background: white;
+    color: black;
+    opacity: 0.25;
+    animation: blinker-tag 1.5s ease-in-out 2;
+}
+
+@keyframes blinker-tag {
+    50% {
+      opacity: 0.05;
+    }
+}

@@ -1,0 +1,49 @@
+<ion-header class="ion-no-border">
+	<ion-toolbar class="header-toolbar header-toolbar--shade">
+		<ion-buttons slot="start">
+			<ion-button class="header-toolbar__btn" (click)="cancel()">
+				<ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
+			</ion-button>
+		</ion-buttons>		
+
+		<ion-title class="header-toolbar__title header-toolbar__title--with-icon" (click)="cancel()">
+			<span>Kopiowanie wydatku</span>
+		</ion-title>
+
+		<ion-buttons slot="end">
+			<app-network-icon></app-network-icon>
+		</ion-buttons>	
+	</ion-toolbar>
+</ion-header>
+	  
+<ion-content class="background-shade">
+	<ion-grid class="p0 expense-grid">
+		<ion-row>
+			<ion-col class="p0">
+				<app-expense-details 
+					[details]="expense"
+                    hideDelete="1"
+                    hideCopy="1"
+					(detailsChange)="onDetailsChange(expense, $event)">
+				</app-expense-details>
+			</ion-col>
+		</ion-row>
+	</ion-grid>	
+</ion-content>
+
+<ion-footer> 
+	<ion-toolbar class="action-toolbar">
+		<ion-buttons class="action-toolbar__container">
+			<ion-button 
+                class="action-toolbar__btn action-toolbar__btn--green" 
+                expand="full" 
+                (click)="ok()">
+                
+				<div class="m1">
+					<span class="action-toolbar__label-only">Dodaj wydatek</span>
+				</div>
+			</ion-button>
+		</ion-buttons>	
+	</ion-toolbar>
+</ion-footer>
+	  

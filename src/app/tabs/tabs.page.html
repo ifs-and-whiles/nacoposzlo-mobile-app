@@ -1,0 +1,78 @@
+<ion-tabs (ionTabsDidChange)="onTabChange($event)">
+	<div *ngIf="globalActionsManager.areActionsShown" class="shadow-overlay"
+		(click)="onOverlayClick()"
+		[@shadowOverlayVisibilityChanged]="globalActionsManager.areActionsShown? 'shown' : 'hidden'">
+	</div>
+
+	<ion-fab *ngIf="showTabBar && !isKeyboardVisible" vertical="bottom" horizontal="center" class="fab">
+		<ion-fab-button class="fab__main-btn" id="fabMainAction" (click)="onShowActionsClick()" appTrackWidth>
+			<ion-icon name="add-outline"></ion-icon>
+		</ion-fab-button>
+
+		<ion-fab-list side="top" class="fab__list">
+			<ion-fab-button id="fabCameraAction"
+				class="fab__btn" (click)="onCameraClick()" 
+				appForceWidth [forceWidthAsMaxOf]="['fabCameraActionContainer', 'fabExpenseActionContainer', 'fabGalleryActionContainer']"
+				appForceLeftByHalfOfWidth [offsetByHalfOf]="'fabMainAction'">
+				<div id="fabCameraActionContainer" class="fab-btn-content" appTrackWidth>
+					<div class="fab-btn-content__container">
+						<ion-icon class="fab-btn-content__icon" name="camera-outline"></ion-icon>
+						<span *ngIf="isInfiniteScanningAllowed">Zeskanuj paragon (&infin;)</span>
+						<span *ngIf="!isInfiniteScanningAllowed">Zeskanuj paragon ({{scansLeft}})</span>						
+					</div>
+				</div>
+			</ion-fab-button>
+
+			<ion-fab-button id="fabGalleryAction"
+				class="fab__btn" (click)="onGalleryClick()" 
+				appForceWidth [forceWidthAsMaxOf]="['fabCameraActionContainer', 'fabExpenseActionContainer', 'fabGalleryActionContainer']"
+				appForceLeftByHalfOfWidth [offsetByHalfOf]="'fabMainAction'">
+				<div id="fabGalleryActionContainer" class="fab-btn-content" appTrackWidth>
+					<div class="fab-btn-content__container">
+						<ion-icon class="fab-btn-content__icon" name="image-outline"></ion-icon>
+						<span *ngIf="isInfiniteScanningAllowed">Dodaj z galerii (&infin;)</span>
+						<span *ngIf="!isInfiniteScanningAllowed">Dodaj z galerii ({{scansLeft}})</span>	
+					</div>
+				</div>
+			</ion-fab-button>
+
+			<ion-fab-button id="fabExpenseAction"
+				class="fab__btn" (click)="onExpenseClick()" 
+				appForceWidth [forceWidthAsMaxOf]="['fabCameraActionContainer', 'fabExpenseActionContainer', 'fabGalleryActionContainer']"
+				appForceLeftByHalfOfWidth [offsetByHalfOf]="'fabMainAction'">
+				<div id="fabExpenseActionContainer" class="fab-btn-content" appTrackWidth>				
+					<div class="fab-btn-content__container">
+						<ion-icon class="fab-btn-content__icon" name="cash-outline"></ion-icon> 
+						<span>Dodaj wydatki</span>
+					</div>			
+				</div>				
+			</ion-fab-button>
+		</ion-fab-list>
+	</ion-fab>	
+
+	<ion-tab-bar slot="bottom" *ngIf="showTabBar">
+		<ion-tab-button tab="start" [class.tab-selected]="currentTab == 'start'">
+			<ion-icon name="stats-chart-outline"></ion-icon>
+			<ion-label>Raporty</ion-label>
+		</ion-tab-button>
+
+		<ion-tab-button tab="expenses" [class.tab-selected]="currentTab == 'expenses'">
+			<ion-icon name="cash-outline"></ion-icon>
+			<ion-label>Wydatki</ion-label>
+		</ion-tab-button>
+		
+		<ion-tab-button tab="" disabled>
+		</ion-tab-button>
+		
+		<ion-tab-button tab="receipts" [class.tab-selected]="currentTab == 'receipts'">
+			<ion-icon name="receipt-outline"></ion-icon>
+			<ion-label>Paragony</ion-label>
+		</ion-tab-button>
+
+		<ion-tab-button tab="more" [class.tab-selected]="currentTab == 'more'">
+			<ion-icon name="menu-outline"></ion-icon>
+			<ion-label>Więcej</ion-label>
+		</ion-tab-button>
+	</ion-tab-bar>
+
+</ion-tabs>

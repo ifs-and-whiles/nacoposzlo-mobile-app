@@ -1,0 +1,14 @@
+@import "./../../styles-utils/validation.scss";
+@import './../../styles-utils/buttons.scss';
+@import './../../styles-utils/content.scss';
+
+.suffix-parent {
+    ::ng-deep .native-input{
+        position: relative;
+    }
+}
+
+.suffix {
+    position: absolute;
+    bottom: 8px;
+}

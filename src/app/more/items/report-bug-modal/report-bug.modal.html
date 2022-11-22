@@ -1,0 +1,34 @@
+<ion-header class="ion-no-border">
+    <ion-toolbar class="header-toolbar header-toolbar--shade">
+        <ion-buttons slot="start">
+            <ion-button class="header-toolbar__btn" (click)="cancel()">
+                <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+    
+        <ion-title class="header-toolbar__title header-toolbar__title--with-icon" (click)="cancel()">
+            <span>Zgłoś błąd</span>
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
+        
+<ion-content class="background-shade report">
+    <div class="mt3 hide-on-small-screen">
+        <app-empty-screen
+            imgUrl="../../assets/images/troubles.svg">
+        </app-empty-screen>
+    </div>
+
+    <div class="ion-text-center m3">
+        <span>Bardzo nam przykro jeżeli wystąpił błąd. Napisz do nas:</span>
+    </div>
+
+    <div class="ion-text-center report__email">
+        <span>pomoc@nacoposzlo.pl</span>
+    </div>
+
+    <div class="ion-text-center m3">
+        <span>W wiadomości opisz dokładnie problem oraz, jeżeli to możliwe, załącz zdjęcia ekranu. Dobry opis pomoże nam jeszcze szybciej naprawić znaleziony błąd.</span>
+    </div>
+   
+</ion-content>

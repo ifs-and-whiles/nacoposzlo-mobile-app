@@ -1,0 +1,1 @@
+export const API_URL = 'https://some-url-should-be-here.pl'

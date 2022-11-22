@@ -1,0 +1,13 @@
+
+@import "./../../../theme/variables.scss";
+
+.placeholder
+{
+	:not(.item-has-focus) & {
+		opacity: 0.3;
+	}
+
+	&--invalid {		
+		color: var(--ion-color-danger);
+	}
+}

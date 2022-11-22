@@ -1,0 +1,8 @@
+@import "./../../../shared/styles-utils/content.scss";
+
+.qr-code {
+    ::ng-deep img{
+        width: 100% !important;
+        height: auto !important;
+    }
+}

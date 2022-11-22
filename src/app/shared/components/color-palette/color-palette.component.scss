@@ -1,0 +1,21 @@
+.color-palette {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+
+    &__item {
+        flex: 0 0 auto;
+        height: 27px;
+        width: 27px;
+        border-radius: 50%;
+        vertical-align: middle;
+        margin-right: 17px;
+    }
+}
+
+.ion-activatable {
+    position: relative;
+    overflow: hidden;
+}
+  
+  

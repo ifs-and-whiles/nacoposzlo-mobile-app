@@ -1,0 +1,98 @@
+<ion-header class="ion-no-border">
+    <ion-toolbar class="header-toolbar header-toolbar--shade">
+		<ion-buttons slot="start">
+			<ion-button class="header-toolbar__btn" (click)="cancel()">
+				<ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
+			</ion-button>
+		</ion-buttons>		
+
+		<ion-title class="header-toolbar__title header-toolbar__title--with-icon" (click)="cancel()">
+			<span>Dostosuj wykres</span>
+        </ion-title>
+        
+        <ion-buttons slot="end">
+            <ion-button class="header-toolbar__reset-btn" 
+                (click)="clear()"
+                [hidden]="!canClear()">
+                Wyczyść
+            </ion-button>
+        </ion-buttons>
+	</ion-toolbar>
+</ion-header>
+        
+<ion-content class="background-shade chart-adaptation">
+
+    <div class="ion-text-center mt3">
+        <span>Przedział czasowy</span>
+    </div>
+
+    <div class="ion-text-center mt2 mx2 chart-adaptation__description">
+        <span>Każdy z miesięcy z wybranego zakresu zostanie podsumowany i umieszczony na wykresie.</span>
+    </div>
+
+    <ion-grid class="mt1 mx1">
+        <ion-row>            
+            <ion-col>
+                <ion-item class="background-shade">
+                    <ion-label>
+                        Od: 
+                    </ion-label>
+                    
+                    <ion-datetime #fromDatePicker="ngModel"
+                        [monthNames]="monthNames"
+                        [monthShortNames]="monthShortNames"
+                        displayFormat="MMMM YYYY" 
+                        pickerFormat="MMMM YYYY" 
+                        [(ngModel)]="fromDateValue"
+                        (ionChange)="onFromDateChange()"
+                        [max]="toDateValue"  
+                        name="from-date" 
+                        required=true
+                        cancel-text="Anuluj"
+                        done-text="Wybierz">
+                    </ion-datetime>
+                </ion-item>
+            </ion-col>
+        </ion-row>
+
+        <ion-row>
+            <ion-col>
+                <ion-item class="background-shade">
+                    <ion-label>
+                        Do: 
+                    </ion-label>
+                    
+                    <ion-datetime #toDatePicker="ngModel"
+                        [monthNames]="monthNames"
+                        [monthShortNames]="monthShortNames"
+                        displayFormat="MMMM YYYY" 
+                        pickerFormat="MMMM YYYY" 
+                        [(ngModel)]="toDateValue"
+                        (ionChange)="onToDateChange()"
+                        [min]="fromDateValue"
+                        name="to-date" 
+                        required=true
+                        cancel-text="Anuluj"
+                        done-text="Wybierz">
+                    </ion-datetime>
+                </ion-item>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+</ion-content>
+
+<ion-footer> 
+    <ion-toolbar class="action-toolbar">
+		<ion-buttons class="action-toolbar__container">
+			<ion-button 
+                class="action-toolbar__btn action-toolbar__btn--green" 
+                expand="full" 
+                (click)="filter()">
+                
+				<div class="m1">
+					<span class="action-toolbar__label-only">Filtruj</span>
+				</div>
+            </ion-button>
+		</ion-buttons>	
+	</ion-toolbar>
+</ion-footer>

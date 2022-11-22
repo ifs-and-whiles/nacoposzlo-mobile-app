@@ -1,0 +1,70 @@
+@import "./../shared/styles-utils/action-toolbar.scss";
+@import "./../shared/styles-utils/placeholder.scss";
+
+.logo {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.action-toolbar {
+    &--white{
+        --background: white;
+    }
+}
+
+.green {
+    --background: linear-gradient(white, var(--background-gradient-green-first), var(--background-gradient-green-second));
+}
+
+.central-card {
+    --background: white;
+    border-radius: 15px;
+
+    &--danger {
+        --background: var(--ion-color-danger);
+        font-weight: 600;
+        color: white;
+    }
+}
+
+.pig {    
+    left: -5px;
+    bottom: 0px;
+    position: absolute;
+}
+
+.segment-btn {
+	color: black !important;
+	height: 35px;
+	min-height: 35px;
+    --indicator-color: white;
+    --indicator-height: 4px;
+}
+
+.consent {
+	&__label {
+		white-space: normal;
+		font-size: 14px;
+		color: var(--ion-color-medium);
+
+        &--invalid {
+            color: var(--ion-color-danger);
+        }
+	}
+
+	&__link {
+		position: relative;
+		z-index: 10;
+	}
+
+	&__checkbox {
+		&--invalid {
+			--border-color: var(--ion-color-danger);
+		}
+	}
+}
+
+.error-link {
+    color: white;
+}

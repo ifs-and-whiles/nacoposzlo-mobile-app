@@ -1,0 +1,65 @@
+<ion-header class="ion-no-border">
+	<ion-toolbar class="header-toolbar header-toolbar--shade">
+		<ion-buttons slot="start">
+			<ion-button class="header-toolbar__btn" (click)="cancel()">
+				<ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
+			</ion-button>
+		</ion-buttons>		
+
+		<ion-title class="header-toolbar__title header-toolbar__title--with-icon" (click)="cancel()">
+			<span *ngIf="isAddingNewExpense">Nowy wydatek</span>
+			<span *ngIf="!isAddingNewExpense">Edycja wydatku</span>
+		</ion-title>
+
+		<ion-buttons slot="end">
+			<app-network-icon></app-network-icon>
+		</ion-buttons>	
+	</ion-toolbar>
+</ion-header>
+	  
+<ion-content class="background-shade">
+	<ion-grid class="p0 expense-grid">
+		<ion-row>
+			<ion-col class="p0">
+				<app-expense-details 
+					[details]="expense"
+                    [hideDelete]="hideDelete"
+                    [hideCopy]="hideCopy"
+					[canShowReceipt]="!hideReceiptLink && expense.receiptLocalId"
+					(detailsChange)="onDetailsChange(expense, $event)"
+					(delete)="delete()"
+                    (showReceipt)="onShowReceipt()"
+                    (copy)="copy()">
+				</app-expense-details>
+			</ion-col>
+		</ion-row>
+	</ion-grid>	
+</ion-content>
+
+<ion-footer> 
+	<ion-toolbar class="action-toolbar">
+		<ion-buttons class="action-toolbar__container" slot="start">
+			<ion-button *ngIf="!isAddingNewExpense"
+                class="action-toolbar__btn action-toolbar__btn--green" 
+                expand="full" 
+                (click)="save()">
+
+				<div class="m1">
+					<span class="action-toolbar__label-only">Zapisz</span>
+				</div>
+			</ion-button>
+
+            <ion-button *ngIf="isAddingNewExpense" 
+                class="action-toolbar__btn action-toolbar__btn--green" 
+                expand="full" 
+                [disabled]="isSaving"
+                (click)="saveAndAddNext()">
+
+				<div class="m1">
+					<span class="action-toolbar__label-only">Dodaj</span>
+				</div>
+			</ion-button>
+		</ion-buttons>	
+	</ion-toolbar>
+</ion-footer>
+	  

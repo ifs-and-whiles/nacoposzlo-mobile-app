@@ -1,0 +1,95 @@
+
+@import "./../../../../theme/variables.scss";
+@import "./../../styles-utils/sliding.scss";
+@import "./../../styles-utils/action-toolbar.scss";
+@import "./../../styles-utils/text-color.scss";
+@import "./../../styles-utils/buttons.scss";
+@import "./../../styles-utils/info-label.scss";
+@import "./../../styles-utils/list-item.scss";
+@import "./../../styles-utils/content.scss";
+
+.tags {
+    &__card {
+		margin-top: 0px;
+		margin-bottom: 0px;
+		margin-left: 0px;
+		margin-right:0px;
+
+		border-radius: 20px;
+
+		padding-left: 20px;
+		padding-right: 20px;
+		padding-top: 15px;
+		padding-bottom: 15px;
+				
+		box-shadow: 1px 1px 3px 2px rgba(0,0,0,0.1);
+		color: var(--info-font-color);
+    }
+    
+    &__selected-label {
+        text-transform: uppercase;
+        font-size: 12px;
+    }
+
+    &__search-bar {
+        padding: 0;
+    }
+
+    &__new-info {
+        color: var(--ion-color-medium);
+        font-size: 12px;
+    }
+
+    &__color-square {
+        width: 20px;
+        height: 20px;
+        border-radius: 3px;
+        opacity: 0.5;
+        display: inline-block;
+        position: absolute;
+        right: 15px;
+    }
+
+    &__item-name {
+        display: inline-block;
+    }
+
+    &__item {        
+        display: inline-block;
+        margin-right: 5px;
+        margin-bottom: 5px;        
+        word-break: break-all;
+    }  
+
+    &__new-tag-section {
+        display: flex;
+        align-items: center;   
+    }
+
+    &__new-item {
+       flex: 0 0 auto;
+       margin-right: 20px;
+    }   
+
+    &__suggested-label {
+        text-transform: uppercase;
+        font-size: 10px;
+    }
+
+    &__list {
+        display: inline-block;
+        word-break: break-all;
+    }
+
+    &__arrow {
+        display: inline-block;
+    }
+
+    &__colors {
+        overflow-x: auto;
+    }      
+
+    &--on-top {
+        z-index: 2;
+    }
+}

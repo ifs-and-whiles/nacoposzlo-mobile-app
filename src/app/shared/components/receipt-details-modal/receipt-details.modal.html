@@ -1,0 +1,109 @@
+<ion-header class="ion-no-border">
+	<ion-toolbar class="header-toolbar header-toolbar--shade">
+		<ion-buttons slot="start">
+			<ion-button class="header-toolbar__btn" (click)="cancel()">
+				<ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
+			</ion-button>
+		</ion-buttons>		
+
+		<ion-title class="header-toolbar__title header-toolbar__title--with-icon" (click)="cancel()">
+			<span>Szczegóły paragonu</span>
+        </ion-title>
+        
+        <ion-buttons slot="end">
+			<app-network-icon></app-network-icon>
+		</ion-buttons>	
+	</ion-toolbar>
+</ion-header>
+	  
+<ion-content class="background-shade receipt-details">
+    <div *ngIf="missingDetailsMode" class="ion-text-center m3">
+        <span>Niektóre ważne informacje z paragonu nie zostały odczytane poprawnie.</span>
+    </div>
+
+    <div *ngIf="missingDetailsMode" class="ion-text-center mx3 mb3 receipt-details__description">
+        <span>Popraw błędnie odczytane informacje aby dokończyć proces skanowania paragonu.</span>
+    </div>
+    
+    <ion-card class="menu-card receipt-details__card">
+        <ion-card-content class="menu-card__content">
+            <form>         
+                <ion-item class="validation">
+                    <ion-label color="medium" position="stacked" class="validation__label"
+                        [class.validation__label--invalid]="sellerInput.control.status === 'INVALID' && (sellerInput.dirty || sellerInput.touched)">
+                        Sprzedawca
+
+                        <span class="required-asterisk"            
+                            [class.required-asterisk--invalid]="sellerInput.control.status === 'INVALID' && (sellerInput.dirty || sellerInput.touched)">
+                            *
+                        </span>
+                    </ion-label>
+
+                    <ion-input 
+                        #sellerInput="ngModel" 
+                        type="text" 
+                        name="seller" 
+                        required
+                        class="validation__input" 
+                        [class.validation__input--invalid]="sellerInput.control.status === 'INVALID' && (sellerInput.dirty || sellerInput.touched)"
+                        placeholder="Uzupełnij sprzedawcę"
+                        [(ngModel)]="seller"
+                        appHideKeyboardOnEnter>
+                    </ion-input>
+                </ion-item>		
+                
+                <ion-item class="validation">
+                    <ion-label color="medium" position="stacked" class="validation__label"
+                        [class.validation__label--invalid]="dateInput.control.status === 'INVALID' && (dateInput.dirty || dateInput.touched)">
+                        Data zakupów
+
+                        <span class="required-asterisk"            
+                            [class.required-asterisk--invalid]="dateInput.control.status === 'INVALID' && (dateInput.dirty || dateInput.touched)">
+                            *
+                        </span>
+                    </ion-label>
+                    
+                    <ion-datetime 
+                        #dateInput="ngModel" 
+                        class="validation__input"
+                        [class.validation__input--invalid]="dateInput.control.status === 'INVALID' && (dateInput.dirty || dateInput.touched)"
+                        placeholder="Uzupełnij datę"
+                        displayFormat="DD-MM-YYYY" 
+                        [(ngModel)]="date"
+                        name="shoppingDate" 
+                        cancel-text="Anuluj"
+                        done-text="Wybierz"
+                        required>
+                    </ion-datetime>
+                </ion-item>	
+                
+                <app-money-input
+                    name="totalAmount"
+                    label="Suma za zakupy"
+                    labelPosition="stacked"
+                    placeholder="Uzupełnij kwotę"
+                    [value]="totalAmount"
+                    (appChange)="onTotalAmountChange($event)"
+                    required="true">                        
+                </app-money-input>
+            </form>  
+        </ion-card-content>
+    </ion-card>  
+</ion-content>
+
+<ion-footer> 
+	<ion-toolbar class="action-toolbar">
+		<ion-buttons class="action-toolbar__container">
+			<ion-button 
+                class="action-toolbar__btn action-toolbar__btn--green" 
+                expand="full" 
+                (click)="ok()">
+                
+				<div class="m1">
+					<span class="action-toolbar__label-only">Zapisz zmiany</span>
+				</div>
+			</ion-button>
+		</ion-buttons>	
+	</ion-toolbar>
+</ion-footer>
+	  

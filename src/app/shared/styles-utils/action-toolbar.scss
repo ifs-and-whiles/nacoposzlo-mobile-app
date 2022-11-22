@@ -1,0 +1,40 @@
+.action-toolbar {
+    border-top: 1px solid var(--ion-color-medium);
+
+    &__container {
+        justify-content: center;
+        width: 100%;
+        margin: 0px;
+    }
+
+    &__icon {
+        font-size: 20px;
+    }
+
+    &__label {
+        font-size: 10px;
+    }
+
+    &__label-only {
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    &__btn {
+        min-height: 56px;
+        width: 100%;
+        margin: 0px;
+
+        &--green {
+            --background: linear-gradient(var(--background-gradient-green-first), var(--background-gradient-green-second));
+        }
+
+        &--blue {
+            --background: linear-gradient(#007A78, var(--background-gradient-green-second));
+        }
+
+        &--danger {
+            --background: linear-gradient(var(--background-gradient-red-first), var(--background-gradient-red-second));
+        }
+    }
+}

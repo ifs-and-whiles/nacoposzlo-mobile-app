@@ -1,0 +1,247 @@
+<ion-header class="ion-no-border">
+	<ion-grid class="p0">
+		<ion-row>
+			<ion-col class="p0">
+				<ion-toolbar class="header-toolbar header-toolbar--shade"> 		
+					<ion-title class="header-toolbar__title">
+						Raporty
+					</ion-title>
+			
+					<ion-buttons slot="end">
+						<app-network-icon></app-network-icon>
+						
+						<ion-button *ngIf="selectedReportType == 'details'"
+							[class.text-primary]="isCustomDetailsChartFiltersOn"
+							(click)="onDetailsChartFiltersClick()" 
+							[disabled]="isLoading">
+
+                            <ion-icon 
+                                slot="icon-only" 
+                                name="options-outline">
+                            </ion-icon>
+						</ion-button>
+
+						<ion-button *ngIf="selectedReportType == 'comparison'"
+							[class.text-primary]="isCustomComparisonChartFiltersOn"
+							(click)="onComparisonChartFiltersClick()" 
+							[disabled]="isLoading">
+                            
+                            <ion-icon 
+                                slot="icon-only" 
+                                name="options-outline">
+                            </ion-icon>
+						</ion-button>
+					</ion-buttons>
+				</ion-toolbar>
+			</ion-col>
+		</ion-row>
+
+		<ion-row class="pt2 background-shade">
+			<ion-col class="p0">
+				<ion-toolbar class="header-toolbar header-toolbar--shade">
+					<ion-segment class="segments"
+						name="reportTypeSection" 
+                        [(ngModel)]="selectedReportType"
+                        (ngModelChange)="onSelectedReportTypeChanged()">
+				
+						<ion-segment-button class="segment-btn" value="details">
+							<ion-label class="m0">Szczegółowe</ion-label>
+						</ion-segment-button>
+				
+						<ion-segment-button class="segment-btn" value="comparison">
+							<ion-label class="m0">Porównawcze</ion-label>
+						</ion-segment-button>
+					</ion-segment>	
+				</ion-toolbar>
+			</ion-col>
+		</ion-row>
+	</ion-grid>
+</ion-header>
+
+<ion-content [class.background-shade]="!(monthChartSlides && monthChartSlides.length)">	
+
+	<div [hidden]="selectedReportType != 'comparison'">
+		<div class="metrics-view summary background-shade" *ngIf="!shouldHideComparisonChart() || isReloadingComparisonChart">
+			
+            <ion-card class="summary__card">
+                <div class="summary__section summary__section--left">
+                    <div class="summary__label">
+                        Suma wydatków
+                    </div>
+
+                    <div *ngIf="comparisonMetrics" class="summary__value">
+                        {{comparisonMetrics.sum | money:'include-currency'}}
+                    </div>		
+
+                    <div *ngIf="!comparisonMetrics" class="summary__value">
+                        0
+                    </div>
+                </div>
+
+                <div class="summary__section summary__section--right">
+                    <div class="summary__label">
+                        Średnia miesięczna
+                    </div>
+
+                    <div *ngIf="comparisonMetrics" class="summary__value">
+                        {{comparisonMetrics.average | money:'include-currency'}}
+                    </div>
+
+                    <div *ngIf="!comparisonMetrics" class="summary__value">
+                        0
+                    </div>
+                </div>  
+            </ion-card>
+	
+			<div class="mt2 ion-text-center"
+				[style.visibility]="isCustomComparisonChartFiltersOn ? 'visible' : 'hidden'">										
+				<ion-button expand="full" color="light" class="months-range-btn" (click)="clearCustomComparisonChartFilters()">
+					<span class="months-range-btn__text">
+						{{comparisonChartMonthsRange.from | month}} - {{comparisonChartMonthsRange.to | month}}
+					</span>
+
+					<ion-icon 
+						class="months-range-btn__icon" 
+						slot="end" 
+						name="close-outline">
+					</ion-icon>
+				</ion-button>	
+			</div>
+		</div>
+				
+		<div class="comparison-view pull-up"
+			*ngIf="comparisonChartData" 
+			[hidden]="shouldHideComparisonChart() && !isReloadingComparisonChart">
+
+			<ion-grid>	
+				<ion-row class="mt1">
+					<ion-col class="p0">
+						<span class="comparison-view__chart-label info-label text-medium">
+							Wybrane kategorie
+						</span>
+					</ion-col>
+				</ion-row>
+				
+				<ion-row class="mt1">
+					<ion-col>
+						<ng-container *ngFor="let item of tagsForComparison">
+							<app-tag-list-read-only
+								class="comparison-view__tag p0"
+								[class.comparison-view__tag--skipped]="!item.isSelected"
+								(click)="tagSelectionChange(item)"
+								[tagIds]="[item.tagId]">
+							</app-tag-list-read-only>	
+						</ng-container>						
+					</ion-col>
+				</ion-row>
+
+				<ion-row class="mt1">
+					<ion-col class="p0">
+                        <app-comparison-chart
+                            [chartData]="comparisonChartData"
+                            [tagIdsForComparison]="selectedTagIdsForComparison"
+                            [isActive]="isComponentActive">
+                        </app-comparison-chart>
+					</ion-col>
+				</ion-row>			
+			</ion-grid>
+		</div>
+
+		<div class="empty-screen__content empty-screen__content--vs-ion-content" [hidden]="!shouldHideComparisonChart() || isReloadingComparisonChart">
+			<app-empty-screen
+				line1="Halo! Nic tu nie ma!" 
+				line2="Dodaj wydatki klikając w 'plus' poniżej."
+				imgUrl="../../assets/images/comparison_charts.svg">
+			</app-empty-screen>
+		</div>	
+	</div>
+
+	<div [hidden]="selectedReportType != 'details'">
+		<div class="background-shade" [hidden]="!monthChartSlides || !monthChartSlides.length" >
+			<ion-grid class="pt2 px0 pb0">	
+				<ion-row [hidden]="!isCustomDetailsChartFiltersOn">
+					<ion-col class="p0">
+						<div>
+							<div class="mb1 ion-text-center">										
+								<ion-button expand="full" color="light" class="date-range-btn" (click)="clearCustomDetailsChartFilters()">
+									<b>{{detailsChartFromDateUnixTimestamp | timestamp:'date'}} - {{detailsChartToDateUnixTimestamp | timestamp:'date'}}</b>
+									<ion-icon slot="end" name="close-outline"></ion-icon>
+								</ion-button>	
+							</div>				
+	
+							<div class="px5">
+								<app-details-chart
+                                    [chartData]="customRangeChart"
+                                    [isActive]="isComponentActive">
+								</app-details-chart>
+							</div>
+						</div>
+					</ion-col>
+				</ion-row>
+	
+				<ion-row class="mt3" *ngIf="isCustomDetailsChartFiltersOn && customRangeChart">
+					<ion-col class="p0">
+						<app-details-tags
+							[chart]="customRangeChart"
+							(drillIn)="onCustomRangeDrillIn($event)"
+							(drillOut)="onCustomRangeDrillOut()">
+						</app-details-tags>					
+					</ion-col>
+				</ion-row>
+		
+				<ion-row class="pb4" *ngIf="monthChartSlides && monthChartSlides.length" [hidden]="isCustomDetailsChartFiltersOn">
+					<ion-col class="p0">
+						<ion-slides pager="false" 
+                            [options]="slideOpts" 
+                            #slides
+							(ionSlideTransitionEnd)="onMonthSlideDidChange()">
+							<ion-slide *ngFor="let monthChartSlide of monthChartSlides">	
+								<div>
+									<div class="mb1">			
+										<app-year-month
+											[month]="monthChartSlide.month">
+										</app-year-month>
+									</div>				
+		
+									<div class="px5">
+										<app-details-chart
+											[chartData]="monthChartSlide.chart"
+                                            [isActive]="isComponentActive">
+										</app-details-chart>
+									</div>
+								</div>
+							</ion-slide>
+						</ion-slides>
+					</ion-col>
+				</ion-row>			
+			</ion-grid>
+		</div>
+
+		<div class="pull-up" *ngIf="!isCustomDetailsChartFiltersOn && selectedMonthSlide">
+			<ion-grid class="p0">	
+				<ion-row>
+					<ion-col class="px0">
+						<app-details-tags
+							[chart]="selectedMonthSlide.chart"
+							(drillIn)="onMonthSlideDrillIn($event)"
+							(drillOut)="onMonthSlideDrillOut()">
+						</app-details-tags>					
+					</ion-col>
+				</ion-row>
+			</ion-grid>
+		</div>		
+	
+		<div class="empty-screen__content empty-screen__content--vs-ion-content" [hidden]="(monthChartSlides && monthChartSlides.length) || isLoading">
+			<app-empty-screen
+				line1="Halo! Nic tu nie ma!" 
+				line2="Dodaj wydatki klikając w 'plus' poniżej."
+				imgUrl="../../assets/images/details_charts.svg">
+			</app-empty-screen>
+        </div>
+        
+        <div [hidden]="!isAppStarting" class="loader" 
+            [@loaderVisibilityChanged]="areChartsLoadedForTheFirstTime ? 'hidden' : 'shown'">            
+            <ion-spinner class="loader__spinner"></ion-spinner>
+        </div>
+	</div>
+</ion-content>

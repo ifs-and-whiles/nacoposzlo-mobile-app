@@ -1,0 +1,36 @@
+@import "./../../../../../theme/variables.scss";
+@import "./../../../styles-utils/sliding.scss";
+@import "./../../../styles-utils/skeleton.scss";
+@import "./../../../styles-utils/list-item.scss";
+@import "./../../../styles-utils/content.scss";
+@import "./../../../styles-utils/validation.scss";
+
+.expense {
+    &__name {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        &--corrupted {
+            color: var(--ion-color-danger);
+        }
+    }
+
+    &__row {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+
+    &__name-col {
+        flex: 0 0 calc(calc(9 / var(--ion-grid-columns, 13)) * 100%);
+        width: calc(calc(9 / var(--ion-grid-columns, 13)) * 100%);
+        max-width: calc(calc(9 / var(--ion-grid-columns, 13)) * 100%);    
+    }
+    
+    &__amount-col {
+        flex: 0 0 calc(calc(4 / var(--ion-grid-columns, 13)) * 100%);
+        width: calc(calc(4 / var(--ion-grid-columns, 13)) * 100%);
+        max-width: calc(calc(4 / var(--ion-grid-columns, 13)) * 100%);
+    }
+}

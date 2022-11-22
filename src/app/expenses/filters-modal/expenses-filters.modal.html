@@ -1,0 +1,217 @@
+<ion-header class="ion-no-border">
+    <ion-toolbar class="header-toolbar header-toolbar--shade">
+        <ion-buttons slot="start">
+            <ion-button class="header-toolbar__btn" (click)="cancel()">
+                <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+    
+        <ion-title class="header-toolbar__title header-toolbar__title--with-icon">
+            <span>Filtry wydatków</span>
+        </ion-title>
+
+        <ion-buttons slot="end">
+            <ion-button class="header-toolbar__reset-btn" 
+                (click)="clear()"
+                [hidden]="!canClear()">
+                Wyczyść
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+        
+<ion-content class="background-shade"> 
+    <form>
+        <ion-grid class="mt2">       
+            <ion-row>
+                <ion-col>
+                    <ion-item class="background-shade"
+                        (click)="filters.isNameFilterOn = !filters.isNameFilterOn">
+                        <ion-label>
+                            Filtruj po nazwie
+                        </ion-label>
+                
+                        <ion-toggle
+                            name="nameFilterToggle"
+                            [ngModel]="filters.isNameFilterOn">
+                        </ion-toggle>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+    
+            <ion-row *ngIf="filters.isNameFilterOn">
+                <ion-col>
+                    <ion-item class="background-shade filter-item">
+                        <ion-label position="floating">
+                            Nazwa: 
+                        </ion-label>
+                        
+                        <ion-input 
+                            placeholder="Podaj nazwę"
+                            type="text" 
+                            inputmode="text" 
+                            name="name" 
+                            clear-input=true 
+                            [(ngModel)]="name" 
+                            (ionChange)="onNameChange()"
+                            (ionFocus)="isNameFocused = true"
+                            (ionBlur)="isNameFocused = false"
+                            appHideKeyboardOnEnter>
+                        </ion-input>
+                    </ion-item>                
+                        
+                    <app-name-suggestions
+                        [namePhrase]="name"
+                        [isVisible]="isNameFocused"
+                        (suggestionSelect)="useNameSuggestion($event)">
+                    </app-name-suggestions>
+                </ion-col>
+            </ion-row>
+    
+            <ion-row>
+                <ion-col>
+                    <ion-item class="background-shade"
+                        (click)="filters.isAmountFilterOn = !filters.isAmountFilterOn">
+                        <ion-label>
+                            Filtruj po kwocie
+                        </ion-label>
+                
+                        <ion-toggle 
+                            name="amountFilterToggle"
+                            [ngModel]="filters.isAmountFilterOn">
+                        </ion-toggle>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+    
+            <ion-row *ngIf="filters.isAmountFilterOn">
+                <ion-col>
+                    <div class="filter-item">
+                        <app-money-input
+                            name="fromAmount"
+                            label="Od kwoty:"
+                            labelColor="dark"
+                            placeholder="Podaj kwotę"
+                            useBackgroundShade="true"
+                            [value]="fromAmount"
+                            (appChange)="onFromAmountChange($event)">                        
+                        </app-money-input>   
+                    </div>          
+                </ion-col>
+            </ion-row>
+    
+            <ion-row *ngIf="filters.isAmountFilterOn">
+                <ion-col>
+                    <div class="filter-item">
+                        <app-money-input
+                            name="toAmount"
+                            label="Do kwoty:"
+                            labelColor="dark"
+                            placeholder="Podaj kwotę"
+                            useBackgroundShade="true"
+                            [value]="toAmount"
+                            (appChange)="onToAmountChange($event)">                        
+                        </app-money-input>  
+                    </div>          
+                </ion-col>
+            </ion-row>
+    
+            <ion-row>
+                <ion-col>
+                    <ion-item class="background-shade"
+                        (click)="filters.isDateFilterOn = !filters.isDateFilterOn">
+                        <ion-label>
+                            Filtruj po dacie
+                        </ion-label>
+                
+                        <ion-toggle 
+                            name="dateFilterToggle"
+                            [ngModel]="filters.isDateFilterOn">
+                        </ion-toggle>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+    
+            <ion-row *ngIf="filters.isDateFilterOn">
+                <ion-col>
+                    <ion-item class="background-shade filter-item">
+                        <ion-label position="floating">
+                            Od: 
+                        </ion-label>
+                        
+                        <ion-datetime #fromDatePicker="ngModel"
+                            [monthNames]="monthNames"
+                            displayFormat="DD MMMM YYYY" 
+                            [(ngModel)]="fromDateValue"
+                            (ionChange)="onFromDateChange()"
+                            [max]="toDateValue"  
+                            name="from-date" 
+                            required=true
+                            cancel-text="Anuluj"
+                            done-text="Wybierz">
+                        </ion-datetime>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+    
+            <ion-row *ngIf="filters.isDateFilterOn">
+                <ion-col>
+                    <ion-item class="background-shade filter-item">
+                        <ion-label position="floating">
+                            Do: 
+                        </ion-label>
+                        
+                        <ion-datetime #toDatePicker="ngModel"
+                            [monthNames]="monthNames"
+                            displayFormat="DD MMMM YYYY" 
+                            [(ngModel)]="toDateValue"
+                            (ionChange)="onToDateChange()"
+                            [min]="fromDateValue"
+                            name="to-date" 
+                            required=true
+                            cancel-text="Anuluj"
+                            done-text="Wybierz">
+                        </ion-datetime>
+                    </ion-item>
+                </ion-col>
+            </ion-row>   
+            
+            <ion-row>
+                <ion-col>
+                    <ion-item class="background-shade" 
+                        (click)="filters.isTagFilterOn = !filters.isTagFilterOn">
+                        <ion-label>
+                            Filtruj po kategoriach
+                        </ion-label>
+                
+                        <ion-toggle 
+                            name="tagsFilterToggle"
+                            [ngModel]="filters.isTagFilterOn">
+                        </ion-toggle>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+    
+            <ion-row *ngIf="filters.isTagFilterOn" class="mb2">
+                <ion-col>                
+                    <app-tags-selector
+                        [canCreateTag]="0"
+                        [selectedTagIds]="filters.tagFilter.tagIds">        
+                    </app-tags-selector>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+    </form>
+</ion-content>
+
+<ion-footer> 
+    <ion-toolbar class="action-toolbar">
+		<ion-buttons class="action-toolbar__container">
+			<ion-button class="action-toolbar__btn action-toolbar__btn--green" expand="full" (click)="filter()" [disabled]="isInvalid()">
+				<div class="m1">
+					<span class="action-toolbar__label-only">Filtruj</span>
+				</div>
+            </ion-button>
+		</ion-buttons>	
+	</ion-toolbar>
+</ion-footer>

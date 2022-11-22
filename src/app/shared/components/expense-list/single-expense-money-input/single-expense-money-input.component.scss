@@ -1,0 +1,22 @@
+@import "./../../../../../theme/variables.scss";
+@import "./../../../styles-utils/sliding.scss";
+@import "./../../../styles-utils/skeleton.scss";
+@import "./../../../styles-utils/list-item.scss";
+@import "./../../../styles-utils/content.scss";
+@import "./../../../styles-utils/validation.scss";
+
+.single-expense-money-input {
+    border: 1px solid var(--ion-color-medium);
+    border-radius: 5px;
+    box-shadow: inset 1px 2px 5px rgba(0, 0, 0, 0.07);        
+    text-align: end;
+    font-weight: 500 !important;
+    caret-color: black;
+    --padding-top: 5px;
+    --padding-bottom: 5px;
+    --padding-end: 8px;
+
+    &--corrupted {
+        color: var(--ion-color-danger);
+    }
+}

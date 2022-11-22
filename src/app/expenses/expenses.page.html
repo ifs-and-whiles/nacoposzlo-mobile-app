@@ -1,0 +1,219 @@
+<ion-header class="ion-no-border" #header>
+	<ion-toolbar class="header-toolbar header-toolbar--shade" *ngIf="!selectedCount"> 
+		<ion-title class="header-toolbar__title">
+			Wydatki
+		</ion-title>
+
+		<ion-buttons slot="end">
+			<app-network-icon></app-network-icon>
+			
+			<ion-button 
+                (click)="exportExpenses()" 
+                [disabled]="isLoading">
+
+                <ion-icon 
+                    slot="icon-only" 
+                    name="document-outline">
+                </ion-icon>
+			</ion-button>
+
+			<ion-button 
+                (click)="showFilters()" 
+                [disabled]="isLoading"
+                [class.text-primary]="areFiltersOn()">   
+
+                <ion-icon
+                    slot="icon-only"                     
+                    name="options-outline">
+                </ion-icon>
+			</ion-button>
+		</ion-buttons>
+	</ion-toolbar>
+
+	<app-selection-counter-toolbar *ngIf="selectedCount"
+		[count]="selectedCount"
+		(dismiss)="unselectAll()">	  
+ 	</app-selection-counter-toolbar>
+</ion-header>
+
+<ion-content
+	[class.background-shade]="showEmptyScreen"
+	[scrollEvents]="true"
+	(ionScrollStart)="onScrollStart()"
+	(ionScrollEnd)="onScrollEnd()"
+    [fullscreen]="true" 
+    appHideHeader 
+    [header]="header"
+    [hideHeaderDisable]="selectedCount">
+
+	<div class="background-shade pb3">
+		<ion-grid class="date-range">
+			<ion-row *ngIf="!filters.isDateFilterOn">
+				<ion-col class="p0">
+					<app-month-selector
+						[month]="filters.selectedMonth"
+                        [availableMonths]="availableMonths"
+						(monthChange)="onSelectedMonthChange($event)">
+					</app-month-selector>
+				</ion-col>
+			</ion-row>
+	
+			<ion-row *ngIf="filters.isDateFilterOn" class="ion-margin-bottom">
+				<ion-col class="ion-text-center p0">
+					<ion-button expand="full" color="light" class="date-range__btn" (click)="clearCustomRange()">
+						<b>{{filters.dateFilter.fromUnixTimestamp | timestamp:'date'}} - {{filters.dateFilter.toUnixTimestamp | timestamp:'date'}}</b>
+						<ion-icon slot="end" name="close-outline"></ion-icon>
+					</ion-button>				
+				</ion-col>
+			</ion-row>	
+
+			<ion-row class="mt0 filter"
+                *ngIf="filters.isTagFilterOn">
+				<ion-col class="ion-text-center p0">
+					<ion-card class="filter__card">
+						<div>
+                            <span class="filter__title">
+                                Kategorie:
+                            </span>
+    
+                            <app-tag-list class="filter__tags"
+                                [tagIds]="filters.tagFilter.tagIds" 
+                                [hideRemove]="0"
+                                (onRemove)="onFilterTagRemove()">
+                            </app-tag-list>
+                        </div>
+
+                        <ion-button (click)="clearTagFilter()" class="filter__icon-btn">
+                            <ion-icon 
+                                slot="icon-only" 
+                                name="close-outline">
+                            </ion-icon>
+                        </ion-button>
+					</ion-card>      
+				</ion-col>
+			</ion-row>	
+            
+            <ion-row class="mt1 filter"
+				*ngIf="filters.isNameFilterOn">
+				<ion-col class="ion-text-center p0">
+					<ion-card class="filter__card">
+						<span class="filter__title">
+                            Nazwa: 
+                        </span>		
+
+                        <ion-input class="filter__text-input"
+                            type="text" 
+                            inputmode="text" 
+                            name="name" 
+                            debounce=200 
+                            [(ngModel)]="filters.nameFilter"
+                            (ionChange)="onNameFilterChange()"
+                            appHideKeyboardOnEnter>
+                        </ion-input>
+
+                        <ion-button (click)="clearNameFilter()" class="filter__icon-btn">
+                            <ion-icon 
+                                slot="icon-only" 
+                                name="close-outline">
+                            </ion-icon>
+                        </ion-button>
+					</ion-card>                  
+				</ion-col>
+			</ion-row>
+
+            <ion-row class="mt1 filter"
+				*ngIf="filters.isAmountFilterOn">
+				<ion-col class="ion-text-center p0">
+					<ion-card class="filter__card">
+						<span class="filter__title">
+                            Kwota: 
+                        </span>		
+
+                        <span *ngIf="filters.fromAmount != null" class="amount-filter">
+                            Od: {{filters.fromAmount | money:'include-currency'}}
+                        </span>
+
+                        <span *ngIf="filters.toAmount != null" class="amount-filter">
+                            Do: {{filters.toAmount | money:'include-currency'}}
+                        </span>
+
+                        <ion-button (click)="clearAmountFilter()" class="filter__icon-btn">
+                            <ion-icon 
+                                slot="icon-only" 
+                                name="close-outline">
+                            </ion-icon>
+                        </ion-button>
+					</ion-card>                  
+				</ion-col>
+			</ion-row>
+
+            <ion-row class="mt1 summary">
+                <ion-col class="p0">
+                    <ion-card class="summary__card">
+                        <div class="summary__section summary__section--left">
+                            <div class="summary__label">
+                                Suma wydatków
+                            </div>
+                            <div class="summary__value">
+                                {{allFilteredExpensesAmountSum | money:'include-currency'}}
+                            </div>
+                        </div>
+
+                        <div class="summary__section summary__section--right">
+                            <div class="summary__label">
+                                Ilość wydatków
+                            </div>
+
+                            <div class="summary__value">
+                                {{allFilteredExpensesCount}}
+                            </div>
+                        </div>  
+                    </ion-card>
+                </ion-col>
+            </ion-row>
+
+            <ion-row class="mt2" *ngIf="!(filters.isTagFilterOn || filters.isNameFilterOn)"
+				[style.visibility]="(!expenses || (expenses && expenses.length)) ? 'visible' : 'hidden'">
+				<ion-col class="ion-text-center p0">
+					<app-tip-label
+						[text]="'przytrzymaj wydatek aby zaznaczyć wiele'">
+					</app-tip-label>            
+				</ion-col>
+			</ion-row>
+		</ion-grid>
+	</div>
+	
+	<div class="expenses-panel pull-up" [hidden]="!showExpenseList">
+		<app-expense-list
+			[expenses]="expenses"
+			[skeletonCount]="skeletonCount"
+			[isScrolling]="isScrolling"
+            [highlightPhrase]="filters.nameFilter"
+			(selectionChange)="onSelectionChange($event)">
+		</app-expense-list>
+	</div>
+
+	<ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
+		<ion-infinite-scroll-content
+			loadingSpinner="bubbles"
+			loadingText="Ładuję wydatki">
+		</ion-infinite-scroll-content>
+	</ion-infinite-scroll>
+
+	<div class="empty-screen__content empty-screen__content--vs-viewport" [hidden]="!showEmptyScreen || isKeyboardVisible">
+        <app-empty-screen
+            line1="Halo! Nic tu nie ma!"
+			line2="Biegnij na zakupy a potem"
+			line3="dodaj wydatki klikając w 'plusa'."
+            imgUrl="../../assets/images/list_of_expenses.svg">
+        </app-empty-screen>
+    </div>
+</ion-content>
+
+<ion-footer *ngIf="selectedCount"> 
+	<app-action-toolbar
+		(delete)="deleteSelected()"
+		(tag)="modifyTags()"
+		(edit)="editSelected()">
+	</app-action-toolbar>
+</ion-footer>

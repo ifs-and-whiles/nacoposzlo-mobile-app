@@ -1,0 +1,59 @@
+@import "./../../theme/variables.scss";
+@import "./../shared/styles-utils/action-toolbar.scss";
+@import "./../shared/styles-utils/content.scss";
+
+.intro {
+
+    &__skip-box {
+        padding: 15px;
+    }
+
+    &__skip-link {
+        font-size: 18px;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    &__text{
+        padding: 10%;
+        font-size: 20px;
+        font-weight: 600;
+    }
+
+    &-title {        
+        font-weight: bold;
+        font-size: 14px;
+    }
+
+    &-card-title {        
+        font-weight: bold;
+        font-size: 20px;
+    }
+
+    &-card-content {
+        font-weight: normal;
+        font-size: 14px;;
+    }
+
+    &-slide-card {
+        margin-bottom: 30px;
+        --background: white;
+        border: 0px;
+        border-radius: 0px;
+        box-shadow: none;
+    }
+}
+
+ion-slides {
+    --bullet-background: grey;
+    --bullet-background-active: var(--ion-color-primary);
+}
+
+:host ::ng-deep .swiper-pagination{
+    position: unset;
+
+    .swiper-pagination-bullet {
+        width: 14px;
+        height: 14px;
+    }
+}

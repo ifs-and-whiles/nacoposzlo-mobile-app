@@ -1,0 +1,13 @@
+<div class="tag-list-read-only">
+    <ng-container *ngFor="let tagId of tagIds; let $index = index; let last = last; trackBy: trackTagBy;">
+        <div class="tag-read-only" [style.background-color]="tagsColors[tagId] ?? defaultColor">
+            <span *ngIf="tagsNames[tagId]">{{tagsNames[tagId]}}</span> 
+            <span *ngIf="!tagsNames[tagId]">Kategoria {{tagId}}</span> 
+        </div>	
+
+        <ion-icon [hidden]="last" 
+            class="tag-list-read-only__arrow"
+            name="chevron-forward-outline">
+        </ion-icon>
+    </ng-container>
+</div>

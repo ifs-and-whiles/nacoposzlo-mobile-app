@@ -1,0 +1,54 @@
+<ion-header class="ion-no-border">
+    <ion-toolbar class="header-toolbar header-toolbar--shade">
+        <ion-buttons slot="start">
+            <ion-button class="header-toolbar__btn" (click)="cancel()">
+                <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+    
+        <ion-title class="header-toolbar__title header-toolbar__title--with-icon" (click)="cancel()">
+            <span>Filtry paragonu</span>
+        </ion-title>
+
+        <ion-buttons slot="end">
+            <ion-button class="header-toolbar__reset-btn" 
+                (click)="clear()"
+                [hidden]="!tagIds.length">
+                Wyczyść
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+        
+<ion-content class="background-shade"> 
+    <ion-grid class="mt2">       
+        <div class="ion-text-center mt3">
+            <span>Filtruj po kategoriach</span>
+        </div>
+
+        <ion-row class="mb2">
+            <ion-col>                
+                <app-tags-selector 
+                    [canCreateTag]="0"
+                    [selectedTagIds]="tagIds">        
+                </app-tags-selector>
+            </ion-col>
+        </ion-row>       
+    </ion-grid>
+</ion-content>
+
+<ion-footer> 
+    <ion-toolbar class="action-toolbar">
+		<ion-buttons class="action-toolbar__container">
+			<ion-button 
+                class="action-toolbar__btn action-toolbar__btn--green" 
+                expand="full" 
+                (click)="filter()">
+                
+				<div class="m1">
+					<span class="action-toolbar__label-only">Filtruj</span>
+				</div>
+            </ion-button>
+		</ion-buttons>	
+	</ion-toolbar>
+</ion-footer>

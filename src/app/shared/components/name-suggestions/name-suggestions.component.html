@@ -1,0 +1,10 @@
+<div *ngIf="isVisible && isKeyboardVisible && suggestions.length" 
+    class="suggestions">
+
+    <div *ngFor="let suggestion of suggestions" 
+        class="suggestions__item"
+        (mousedown)="onMouseDown(suggestion)">
+        <span innerHtml="{{suggestion.name | boldprefix: phrase}}"></span> 
+        <span class="suggestions__counter">({{suggestion.count}})</span>
+    </div>
+</div>

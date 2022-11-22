@@ -1,0 +1,226 @@
+<ion-header class="ion-no-border" #header>
+	<ion-toolbar class="header-toolbar header-toolbar--shade" *ngIf="!selectedCount"> 
+		<ion-title class="header-toolbar__title">
+			Paragony
+		</ion-title>
+
+		<ion-buttons slot="end">
+			<app-network-icon></app-network-icon>
+			
+			<ion-button *ngIf="!selectedCount"
+				[class.text-primary]="isCustomFiltersOn"
+				(click)="onFiltersClick()" 
+				[disabled]="isLoading">
+
+                <ion-icon 
+                    slot="icon-only" 
+                    name="options-outline">
+                </ion-icon>
+			</ion-button>
+		</ion-buttons>
+	</ion-toolbar>
+
+	<app-selection-counter-toolbar *ngIf="selectedCount"
+		[count]="selectedCount"
+		(dismiss)="unselectAll()">	  
+ 	</app-selection-counter-toolbar>
+</ion-header>
+
+<ion-content
+	[class.background-shade]="(receipts && !receipts.length) && !isLoading"
+	[scrollEvents]="true" 
+	(ionScrollStart)="onScrollStart()"
+	(ionScrollEnd)="onScrollEnd()"
+    [fullscreen]="true" 
+    appHideHeader 
+    [header]="header"
+    [hideHeaderDisable]="selectedCount">
+
+	<div class="background-shade pb4">
+		<ion-grid>
+			<ion-row *ngIf="!isCustomFiltersOn">
+				<ion-col class="p0">
+					<app-month-selector
+						[month]="selectedMonth"
+                        [availableMonths]="availableMonths"
+						(monthChange)="onSelectedMonthChange($event)">
+					</app-month-selector>
+				</ion-col>
+			</ion-row>
+	
+			<ion-row *ngIf="isCustomFiltersOn" class="ion-margin-bottom">
+				<ion-col class="ion-text-center">
+					<ion-button expand="full" color="light" class="date-range-btn" (click)="clearCustomFilters()">
+						<b>{{filterFromUnixTimestamp | timestamp:'date'}} - {{filterToUnixTimestamp | timestamp:'date'}}</b>
+						<ion-icon slot="end" name="close-outline"></ion-icon>
+					</ion-button>				
+				</ion-col>
+			</ion-row>
+	
+			<ion-row class="mt0"
+				[style.visibility]="!receipts || (receipts && receipts.length) ? 'visible' : 'hidden'">
+				<ion-col class="ion-text-center p0">
+					<app-tip-label
+						[text]="'przytrzymaj paragon aby zaznaczyć wiele'">
+					</app-tip-label>            
+				</ion-col>
+			</ion-row>
+		</ion-grid>
+	</div>	
+
+	<div class="receipts-panel pull-up"
+		[hidden]="(receipts && !receipts.length) && !isLoading">
+
+		<ion-list *ngIf="!receipts">
+			<ion-item *ngFor="let skeleton of skeletons" class="skeleton-item mb1">
+				<ion-grid class="pt0 pr0 pl0">
+					<ion-row class="m0">
+						<ion-col size="1" class="p0">
+							<ion-row class="m0">
+								<ion-col class="p0">
+									<ion-skeleton-text animated class="skeleton-item__date"></ion-skeleton-text>
+								</ion-col>
+							</ion-row>
+						
+							<ion-row class="m0">
+								<ion-col class="p0">
+									<ion-skeleton-text animated class="skeleton-item__date"></ion-skeleton-text>
+								</ion-col>
+							</ion-row>
+						</ion-col>
+		
+						<ion-col size="11" class="p0">
+							<ion-row class="m0">
+								<ion-col size="9" class="pl1 py0">
+									<ion-skeleton-text animated class="skeleton-item__name"></ion-skeleton-text>
+								</ion-col>
+								<ion-col size="3" class="p0">
+									<ion-skeleton-text animated class="skeleton-item__amount"></ion-skeleton-text>
+								</ion-col>
+							</ion-row>
+		
+							<ion-row class="m0">
+								<ion-col class="pl1 py0">
+									<ion-skeleton-text animated class="skeleton-item__subtitle"></ion-skeleton-text>
+								</ion-col>
+							</ion-row>
+						</ion-col>                    
+					</ion-row>                
+				</ion-grid>
+			</ion-item>
+		</ion-list>
+	
+		<div class="can-be-disabled" *ngIf="receipts && receipts.length"
+			[class.can-be-disabled--disabled]="isDeleting">
+			<ng-container *ngFor="let receipt of receipts; trackBy: trackReceiptBy">
+                <div class="sliding" 
+                    [class.sliding--danger]="receipt.isBeingSwiped"
+                    [hidden]="receipt.isBeingDeleted">						
+					<ion-icon class="sliding__icon sliding__icon--left" name="trash-outline"></ion-icon>
+	
+                    <div class="pt1 receipt list-item sliding__item ion-activatable"
+                        [appGestures]="!isScrolling"
+						(appLongPress)="toggleReceiptSelection(receipt)"
+                        (appSwipe)="deleteReceipt(receipt)"
+                        (appIsSwiping)="receipt.isBeingSwiped = $event">						
+	
+						<div class="list-item__content">
+							<app-selectable-item 
+								[itemTemplate]="receipt.isScanningFinished ? (isReceiptConfirmed(receipt) ? correctReceiptTemplate : incorrectReceiptTemplate) : processingReceiptTemplate"
+								[dateUnixTimestamp]="receipt.createdAtUnixTimestamp"
+								[isSelected]="receipt.isSelected"
+								[name]="receipt.itemId"
+                                (itemClick)="clickReceipt(receipt)"
+                                (iconClick)="toggleReceiptSelection(receipt)">
+							</app-selectable-item>
+						</div>
+						
+						<ion-ripple-effect type="bounded" class="hide-on-sliding"></ion-ripple-effect>
+	
+						<ng-template #processingReceiptTemplate>
+							<ion-row class="ion-align-items-center">		
+								<ion-col size="9" class="pl1 pt0 text-medium">
+									<div>Dodajemy paragon...</div>
+								</ion-col>
+		
+								<ion-col size="3" class="ion-text-end pt0">
+									<ion-spinner name="dots"></ion-spinner>	
+								</ion-col>
+							</ion-row>
+						</ng-template>		
+	
+						<ng-template #correctReceiptTemplate>
+							<ion-row>						
+								<ion-col class="pl1 pr0 py0 pt0">
+									<ion-row class="m0">
+										<ion-col size="8" class="px0 pt0">
+											<div class="receipt__seller">{{receipt.seller}}</div>
+										</ion-col>
+	
+										<ion-col size="4" class="px0 pt0">	
+											<span class="ion-float-right">
+												{{receipt.totalAmount ? (receipt.totalAmount | money:'include-currency') : '?'}}
+											</span>		
+										</ion-col>
+									</ion-row>
+									
+									<ion-row class="m0">
+										<ion-col class="px0">
+											<span class="ion-float-left info-label text-medium">{{receipt.dateUnixTimestamp | timestamp:'long-date'}}</span>
+											<span class="ion-float-right text-danger" *ngIf="shouldWarnAboutProductSum(receipt)">
+												Suma: &nbsp; {{(receipt.productsTotalAmountSum ? (receipt.productsTotalAmountSum | money:'include-currency') : '0&nbsp;zł')}} 
+											</span>		
+										</ion-col>
+									</ion-row>
+								</ion-col>
+							</ion-row>
+						</ng-template>
+	
+						<ng-template #incorrectReceiptTemplate>
+							<ion-row>	
+								<ion-col class="pl1 pr0 py0 pt0">
+									<ion-row class="m0">
+										<ion-col class="px0 pb0 pt0">
+											<div>Skan wymaga drobnych poprawek</div>
+										</ion-col>
+									</ion-row>
+									<ion-row class="m0">
+										<ion-col class="p0">
+											<span class="info-label text-danger">{{whatNeedsToBeFixed(receipt)}}</span>
+										</ion-col>
+									</ion-row>
+								</ion-col>
+							</ion-row>
+						</ng-template>
+					</div>
+	
+					<ion-icon class="sliding__icon sliding__icon--right" name="trash-outline"></ion-icon>
+				</div>
+			</ng-container>
+		</div>
+	</div>
+
+	<ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
+		<ion-infinite-scroll-content
+			loadingSpinner="bubbles"
+			loadingText="Ładuję paragony">
+		</ion-infinite-scroll-content>
+	</ion-infinite-scroll>
+
+	<div class="empty-screen__content empty-screen__content--vs-viewport" [hidden]="(receipts && receipts.length) || isLoading">
+        <app-empty-screen
+            class="mt3"
+            line1="Nic tu nie ma! Czas na zakupy :)"
+			line2="A potem dodaj paragony klikając w 'plusa'"
+            imgUrl="../../assets/images/list_of_scans.svg">
+        </app-empty-screen>
+    </div>
+</ion-content>
+
+<ion-footer *ngIf="selectedCount"> 
+	<app-action-toolbar
+		[isTagVisible]="0"
+		[isEditVisible]="0"	
+		(delete)="deleteSelected()">
+	</app-action-toolbar>
+</ion-footer>

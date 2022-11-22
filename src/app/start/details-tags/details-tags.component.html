@@ -1,0 +1,34 @@
+<ion-list lines="none" class="details-tags">
+    <ion-item *ngIf="chart.parentTagIds && chart.parentTagIds.length" 
+        button (click)="onDrillOut()"
+        class="details-tags__subcategory-back-btn">
+        <ion-icon class="details-tags__subcategory-back-icon" slot="start" name="caret-back-outline"></ion-icon>
+
+        <app-tag-list-read-only 
+            class="ion-float-left p0"
+            [tagIds]="chart.parentTagIds">
+        </app-tag-list-read-only>		
+    </ion-item>
+
+    <ng-container  *ngFor="let tagChart of chart.innerTags;">
+        <div class="details-tags__single-tag-chart" *ngIf="tagChart.expenseCount > 0">
+            <ion-item button (click)="onDrillIn(tagChart)" class="details-tags__tag-item">
+                <app-tag-list-read-only
+                    class="ion-float-left p0 details-tags__tag"
+                    [tagIds]="[tagChart.tagId]">
+                </app-tag-list-read-only>
+
+                <span slot="end" class="ion-float-right details-tags__tag-money">{{tagChart.totalAmount | money:'include-currency'}}</span>				
+            </ion-item>
+
+            <ion-progress-bar 
+                class="details-tags__tag-percentage-bar" 
+                [value]="tagChart.percentage"
+                [appTagPercentageBar]="tagChart.tagId">
+            </ion-progress-bar>
+            
+            <span class="ion-float-left details-tags__tag-percentage-bar--left-label">Wydatków: {{tagChart.expenseCount}}</span>	
+            <span class="ion-float-right details-tags__tag-percentage-bar--right-label">{{tagChart.percentage * 100 | money}} %</span>	
+        </div>						
+    </ng-container>				
+</ion-list>

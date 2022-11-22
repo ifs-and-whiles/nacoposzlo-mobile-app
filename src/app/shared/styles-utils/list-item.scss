@@ -1,0 +1,18 @@
+.list-item {
+    width: 100%;
+    font-size: 15px;   
+    background-color: white; 
+    position: relative;
+    overflow: hidden;
+
+    &__content {
+        padding-bottom: 5px;   
+        padding-left: 16px;
+        padding-right: 16px;
+        border-bottom: 1px solid var(--ion-item-border-color,var(--ion-border-color,var(--ion-color-step-150,rgba(0,0,0,0.13))));
+
+        .sliding-active &{
+            border-bottom: 1px solid transparent;
+        }
+    }
+}

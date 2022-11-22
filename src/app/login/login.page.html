@@ -1,0 +1,383 @@
+<ion-content class="ion-padding green">
+	<form #form="ngForm">
+		<ion-grid>
+			<ion-row [hidden]="isKeyboardVisible" class="mt3 mb3">
+				<ion-col>
+					<img [hidden]="isKeyboardVisible" class="logo" src="../../assets/images/logotext.svg" />							
+				</ion-col>
+			</ion-row>
+
+			<ion-row class="mt2">
+				<ion-col>
+					<ion-segment name="loginSectionSelection" 
+						[(ngModel)]="selectedSection" 
+						(ngModelChange)="selectedSectionChange()"
+						[disabled]="isLoading">
+
+						<ion-segment-button class="segment-btn" value="login">
+							<ion-label>Zaloguj się</ion-label>
+						</ion-segment-button>
+
+						<ion-segment-button class="segment-btn" value="signup">
+							<ion-label>Załóż konto</ion-label>
+						</ion-segment-button>
+					</ion-segment>								
+				</ion-col>
+			</ion-row>				
+			
+			<ion-row *ngIf="selectedSection === 'login'">
+				<ion-col class="p0">                  
+                    <ion-card *ngIf="signInErrorCode" class="central-card central-card--danger mx0 mt2">
+                        <ion-card-content class="my0">
+							<ion-row *ngIf="signInErrorCode === 'NotAuthorizedException'">
+								<ion-col>
+									<ion-label>Podany e-mail lub hasło jest niepoprawne.</ion-label>
+								</ion-col>
+							</ion-row>                            
+
+                            <ion-row *ngIf="signInErrorCode === 'InvalidParameterException'">
+								<ion-col>
+									<ion-label>Podany e-mail ma błędny format.</ion-label>
+								</ion-col>
+							</ion-row>
+
+                            <ion-row *ngIf="signInErrorCode === 'UserNotConfirmedException'">
+								<ion-col>
+									<ion-label>Podany e-mail nie został potwierdzony.</ion-label>
+								</ion-col>
+							</ion-row>
+
+							<ion-row *ngIf="signInErrorCode === 'NetworkError'">
+								<ion-col>
+									<ion-label>Brak połączenia z internetem.</ion-label>
+								</ion-col>
+							</ion-row>
+
+                            <ion-row *ngIf="signInErrorCode === 'PasswordResetRequiredException'">
+								<ion-col>
+									<ion-label>Hasło zostało zresetowane przez administratora.<br><br>
+                                        <a class="error-link" [routerLink]="['/forgot-password']">Kliknij tutaj</a> aby ustawić nowe hasło.</ion-label>
+								</ion-col>
+							</ion-row>
+                            
+                            <ion-row *ngIf="signInErrorCode === 'CodeMismatchException'">
+								<ion-col>
+									<ion-label>Podany kod jest niepoprawny.</ion-label>
+								</ion-col>
+							</ion-row>
+
+                            <ion-row *ngIf="signInErrorCode === 'ExpiredCodeException'">
+								<ion-col>
+									<ion-label>Podany kod stracił ważność. Wygeneruj i użyj nowy.</ion-label>
+								</ion-col>
+							</ion-row>
+						</ion-card-content>
+                    </ion-card>
+
+					<ion-card *ngIf="!isMFAChallenged" id="loginCard" class="central-card mx0 mt2">
+						<ion-card-content class="my0 pt0">
+							<ion-row>
+								<ion-col class="p0">
+									<div>
+										<ion-item>
+											<ion-label
+												class="placeholder" 
+												position="floating"
+								                [class.placeholder--invalid]="emailTxt.touched && emailTxt.invalid">
+												E-mail				
+											</ion-label>
+
+											<ion-input
+												#emailTxt="ngModel"
+												name="email" 
+												type="email" 
+												[(ngModel)]="email" 
+												[disabled]="isLoading"
+												required>
+											</ion-input>
+										</ion-item>
+
+										<div *ngIf="emailTxt.touched && emailTxt.invalid" class="validation-error">
+											Podaj e-mail
+										</div>
+
+										<ion-item>
+											<ion-label 
+												class="placeholder" 
+												position="floating"
+												[class.placeholder--invalid]="passwordTxt.touched && passwordTxt.invalid">
+												Hasło
+											</ion-label>
+
+											<ion-input 
+												#passwordTxt="ngModel"
+												name="password" 
+												type="password" 
+												[(ngModel)]="password" 
+												[disabled]="isLoading"
+												(keyup.enter)="tryLogin()"
+												required>
+											</ion-input>
+										</ion-item>
+
+										<div *ngIf="passwordTxt.touched && passwordTxt.invalid" class="validation-error">
+											Podaj hasło
+										</div>
+									</div>
+								</ion-col>
+							</ion-row>
+				
+							<ion-row class="mt2">
+								<ion-col>
+									<ion-label>Nie pamiętasz hasła? 
+										<a [routerLink]="['/forgot-password']">kliknij tutaj</a>
+									</ion-label>
+								</ion-col>
+							</ion-row>
+						</ion-card-content>
+					</ion-card>
+
+                    
+					<ion-card *ngIf="isMFAChallenged" id="loginCard" class="central-card mx0 mt2">
+						<ion-card-content class="my0 pt0">
+							<ion-row>
+								<ion-col class="p0">
+									<div>
+										<ion-item>
+											<ion-label
+												class="placeholder" 
+												position="floating"
+								                [class.placeholder--invalid]="mfaTxt.touched && mfaTxt.invalid">
+												Kod jednorazowy			
+											</ion-label>
+
+											<ion-input
+												#mfaTxt="ngModel"
+												name="mfaCode" 
+												type="number" 
+												[(ngModel)]="mfaCode" 
+												[disabled]="isLoading"
+												required>
+											</ion-input>
+										</ion-item>
+
+										<div *ngIf="mfaTxt.touched && mfaTxt.invalid" class="validation-error">
+											Podaj kod jednorazowy
+										</div>
+									</div>
+								</ion-col>
+							</ion-row>
+
+                            <ion-row class="mt2">
+								<ion-col>
+									<ion-label>Straciłeś swój telefon z 2FA? 
+                                        <br>
+                                        Napisz do nas: 
+
+                                        <a href="mailto:kontakt@nacoposzlo.pl">kontakt@nacoposzlo.pl</a>
+									</ion-label>
+								</ion-col>
+							</ion-row>
+						</ion-card-content>
+					</ion-card>
+				</ion-col>
+			</ion-row>
+
+			<ion-row *ngIf="selectedSection === 'signup'">
+				<ion-col class="p0">
+                    <ion-card *ngIf="signUpErrorCode || (wasConsentClicked && !termsAndPrivacyPolicyConsent)" 
+                        class="central-card central-card--danger mx0 mt2">
+                        <ion-card-content class="my0">
+							<ion-row *ngIf="signUpErrorCode === 'PasswordsDontMatch'">
+								<ion-col>
+									<ion-label>Hasła muszą być takie same.</ion-label>
+								</ion-col>
+							</ion-row>
+                            
+                            <ion-row *ngIf="signUpErrorCode === 'UsernameExistsException'" >
+								<ion-col>
+									<ion-label>Użytkownik o podanym e-mailu już istnieje.</ion-label>
+								</ion-col>
+							</ion-row>
+				
+							<ion-row *ngIf="signUpErrorCode === 'InvalidPasswordException' || (signUpErrorCode === 'InvalidParameterException' && signUpInvalidParameter === 'password')">
+								<ion-col>
+									<ion-label>Hasło powinno zawierać minimalnie 6 znaków, w tym co najmniej jedną cyfrę i jedną wielką literę.</ion-label>
+								</ion-col>
+							</ion-row>
+                            
+                            <ion-row *ngIf="signUpErrorCode === 'InvalidParameterException' && signUpInvalidParameter === 'username'">
+								<ion-col>
+									<ion-label>Podany e-mail ma błędny format.</ion-label>
+								</ion-col>
+							</ion-row>
+							
+							<ion-row *ngIf="signUpErrorCode === 'NetworkError'">
+								<ion-col>
+									<ion-label>Brak połączenia z internetem.</ion-label>
+								</ion-col>
+							</ion-row>
+
+                            <ion-row *ngIf="wasConsentClicked && !termsAndPrivacyPolicyConsent">
+								<ion-col>
+									<ion-label>Regulamin oraz Polityka prywatności aplikacji muszą zostać zaakceptowane.</ion-label>
+								</ion-col>
+							</ion-row>
+						</ion-card-content>
+                    </ion-card>
+
+					<ion-card class="central-card mx0 mt2">
+						<ion-card-content class="my0 pt0 pb2">
+							<ion-row *ngIf="!isUserRegisteredSuccessfully">
+								<ion-col class="p0">
+									<div>
+										<ion-item>
+											<ion-label
+												class="placeholder" 
+												position="floating"
+												[class.placeholder--invalid]="registrationEmailTxt.touched && registrationEmailTxt.invalid">
+												E-mail
+											</ion-label>
+
+											<ion-input
+												#registrationEmailTxt="ngModel"
+												name="email" 
+												type="email" 
+												[(ngModel)]="email" 
+												required>
+											</ion-input>
+										</ion-item>
+										
+										<div *ngIf="registrationEmailTxt.touched && registrationEmailTxt.invalid" class="validation-error">
+											Podaj e-mail
+										</div>
+
+										<ion-item>
+											<ion-label
+												class="placeholder" 
+												position="floating"
+												[class.placeholder--invalid]="registrationPasswordTxt.touched && registrationPasswordTxt.invalid">
+												Hasło
+											</ion-label>
+
+											<ion-input 
+												#registrationPasswordTxt="ngModel"
+												name="password" 
+												type="password" 
+												[(ngModel)]="password" 
+												required>
+											</ion-input>
+										</ion-item>
+
+										<div *ngIf="registrationPasswordTxt.touched && registrationPasswordTxt.invalid" class="validation-error">
+											Podaj hasło
+										</div>
+				
+										<ion-item>
+											<ion-label
+												class="placeholder" 
+												position="floating"
+												[class.placeholder--invalid]="registrationRepeatedPasswordTxt.touched && registrationRepeatedPasswordTxt.invalid">
+												Powtórz hasło
+											</ion-label>
+
+											<ion-input 
+												#registrationRepeatedPasswordTxt="ngModel" 
+												name="repeatpassword" 
+												type="password" 
+												[(ngModel)]="repeatedPassword"
+
+												required>
+											</ion-input>
+										</ion-item>
+
+										<div *ngIf="registrationRepeatedPasswordTxt.touched && registrationRepeatedPasswordTxt.invalid" class="validation-error">
+											Powtórz hasło
+										</div>
+
+										<ion-item lines="none" class="mt1 consent">
+											<ion-checkbox 
+												class="consent__checkbox"
+												[class.consent__checkbox--invalid]="!termsAndPrivacyPolicyConsent && wasConsentClicked"
+												name="terms"              
+                                                (ionChange)="onConsentChange()"                                 
+												[(ngModel)]="termsAndPrivacyPolicyConsent">
+											</ion-checkbox>
+
+											<ion-label class="ml2 consent__label"
+                                                (click)="onConsentClick()"   
+                                                [class.consent__label--invalid]="!termsAndPrivacyPolicyConsent && wasConsentClicked">
+												Oświadczam, że zapoznałem się z pełną treścią 
+												
+												<a class="consent__link" [routerLink]="" (click)="openTerms()">
+													Regulaminu aplikacji
+												</a>
+
+												oraz 
+												
+												<a class="consent__link"  [routerLink]="" (click)="openPrivacyPolicy()">
+													Polityką prywatności aplikacji
+												</a>, 
+												
+												a także przepisami dotyczącymi ochrony danych osobowych oraz akceptuję ich postanowienia.												
+											</ion-label>
+										</ion-item>									
+									</div>
+								</ion-col>
+							</ion-row>
+
+							<ion-row *ngIf="isUserRegisteredSuccessfully" class="pt2">
+								<ion-col>
+									<ion-label>Na podany adres e-mail został wysłany link weryfikacyjny. Kliknij go aby dokończyć proces rejestracji konta.</ion-label>									
+								</ion-col>
+							</ion-row>
+
+							<ion-row *ngIf="isUserRegisteredSuccessfully">
+								<ion-col>
+									<ion-label>Jeżeli nie otrzymałeś e-maila <a [routerLink]="" (click)="resendVerificationEmail()">kliknij tutaj</a> aby wysłać ponownie.</ion-label>
+								</ion-col>
+							</ion-row>
+						</ion-card-content>
+					</ion-card>
+				</ion-col>
+			</ion-row>		
+		</ion-grid>
+
+		<img id="pigImg" [hidden]="isKeyboardVisible || selectedSection === 'signup' || isPigOverlayingLogicCard" 
+			class="pig"			
+			src="../../assets/images/swinka.svg"/>
+	</form>
+</ion-content>
+
+<ion-footer> 
+	<ion-toolbar class="action-toolbar action-toolbar--white">
+		<ion-buttons class="action-toolbar__container">
+			<ion-button  *ngIf="selectedSection === 'login' && !isMFAChallenged" class="action-toolbar__btn" expand="full" 
+				[disabled]="isLoading"
+				(click)="tryLogin()">
+
+				<div class="m1">
+					<span class="action-toolbar__label-only">Zaloguj się</span>
+				</div>
+			</ion-button>
+
+            <ion-button  *ngIf="selectedSection === 'login' && isMFAChallenged" class="action-toolbar__btn" expand="full" 
+				[disabled]="isLoading"
+				(click)="tryConfirmMfaCode()">
+
+				<div class="m1">
+					<span class="action-toolbar__label-only">Zatwierdź kod</span>
+				</div>
+			</ion-button>
+
+			<ion-button  *ngIf="selectedSection === 'signup'" class="action-toolbar__btn" expand="full" 
+				[disabled]="isLoading"
+				(click)="tryRegister()">
+
+				<div class="m1">
+					<span class="action-toolbar__label-only">Załóż konto</span>
+				</div>
+			</ion-button>
+		</ion-buttons>	
+	</ion-toolbar>
+</ion-footer>

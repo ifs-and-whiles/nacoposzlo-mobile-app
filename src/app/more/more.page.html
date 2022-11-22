@@ -1,0 +1,165 @@
+<ion-header class="ion-no-border">
+	<ion-toolbar class="header-toolbar header-toolbar--shade"> 
+		<ion-title class="header-toolbar__title">
+			Więcej
+        </ion-title>
+        
+        <ion-buttons slot="end">
+			<app-network-icon></app-network-icon>
+		</ion-buttons>
+	</ion-toolbar>
+</ion-header>
+
+<ion-content class="background-shade">
+    <ion-card *ngIf="!isInfiniteScanningAllowed" class="menu-card menu-card--green mt3 mx2">
+        <ion-card-content class="menu-card__content menu-card__content--big">
+           <ion-grid>
+                <ion-row>
+                    <ion-col class="p0 mt1 menu-card__title-label">
+                        Możesz zeskanować jeszcze
+                    </ion-col>
+                </ion-row>
+            
+                <ion-row>
+                    <ion-col class="p0 menu-card__value-label">
+                        {{getScansLeftText()}}
+                    </ion-col>
+                </ion-row>  
+                
+                <ion-row>
+                    <ion-col class="p0 mt2 mb1 menu-card__sell-btn-col">
+                        <ion-button color="light" class="menu-card__sell-btn" (click)="showScansInfo()">				
+                            <span class="text-primary">Skąd wziąć więcej skanów?</span>
+                        </ion-button>
+                    </ion-col>
+                </ion-row>
+           </ion-grid>
+        </ion-card-content>
+    </ion-card>    
+
+    <ion-card class="menu-card mt3 mx2">
+        <ion-card-content class="menu-card__content">
+            <ion-list> 	
+                <ion-item class="menu-item" button (click)="manageTags()">
+                    <ion-label>Zarządzaj kategoriami</ion-label>
+
+                    <ion-icon 
+                        color="primary" 
+                        slot="end" 
+                        name="cog-outline">
+                    </ion-icon>
+                </ion-item>	
+            </ion-list>
+        </ion-card-content>
+    </ion-card>
+
+    <ion-card class="menu-card mt3 mx2">
+        <ion-card-content class="menu-card__content">
+            <ion-list> 	
+
+                <ion-item class="menu-item" button (click)="changePassword()"> 
+                    <ion-label>Zmień hasło</ion-label>
+
+                    <ion-icon 
+                        color="primary" 
+                        slot="end" 
+                        name="key-outline">
+                    </ion-icon>
+                </ion-item>	
+
+                <ion-item class="menu-item" button (click)="manageMfa()">
+                    <ion-label>
+                        Uwierzytelnianie dwuskładnikowe <br>
+                        <span *ngIf="userMfa=='SOFTWARE_TOKEN_MFA'" class="mfa-info">2FA jest włączone</span>
+                        <span *ngIf="userMfa=='NOMFA'" class="mfa-info">2FA jest wyłączone</span>
+                    </ion-label>
+
+                    <ion-icon *ngIf="userMfa=='SOFTWARE_TOKEN_MFA'"
+                        color="primary" 
+                        slot="end" 
+                        name="shield-checkmark-outline">
+                    </ion-icon>
+
+                    <ion-icon *ngIf="userMfa=='NOMFA'"
+                        color="danger" 
+                        slot="end" 
+                        name="shield-outline">
+                    </ion-icon>
+                </ion-item>			
+
+                <ion-item class="menu-item" button (click)="signOut()">
+                    <ion-label>Wyloguj się</ion-label>
+
+                    <ion-icon 
+                        color="primary" 
+                        slot="end" 
+                        name="log-out-outline">
+                    </ion-icon>
+                </ion-item>		
+            </ion-list>
+        </ion-card-content>
+    </ion-card>
+
+    <ion-card class="menu-card mt3 mx2">
+        <ion-card-content class="menu-card__content">
+            <ion-list> 	
+                <ion-item class="menu-item" button (click)="rateApp()">
+                    <ion-label>Oceń aplikację</ion-label>
+
+                    <ion-icon 
+                        color="primary" 
+                        slot="end" 
+                        name="thumbs-up-outline">
+                    </ion-icon>
+                </ion-item>	
+            </ion-list>
+        </ion-card-content>
+    </ion-card>
+
+    <ion-card class="menu-card mt3 mx2">
+        <ion-card-content class="menu-card__content">
+            <ion-list> 	
+
+                <ion-item class="menu-item" button (click)="showIntro()">
+                    <ion-label>Intro</ion-label>
+                    
+                    <ion-icon 
+                        color="primary" 
+                        slot="end" 
+                        name="chevron-forward-outline">
+                    </ion-icon>
+                </ion-item>
+
+                <ion-item class="menu-item" button (click)="reportBug()">
+                    <ion-label>Zgłoś błąd</ion-label>
+                    
+                    <ion-icon 
+                        color="primary" 
+                        slot="end" 
+                        name="chevron-forward-outline">
+                    </ion-icon>
+                </ion-item>			
+
+                <ion-item class="menu-item" button (click)="terms()">
+                    <ion-label>Regulamin aplikacji</ion-label>
+                    
+                    <ion-icon 
+                        color="primary" 
+                        slot="end" 
+                        name="chevron-forward-outline">
+                    </ion-icon>
+                </ion-item>			
+
+                <ion-item class="menu-item" button (click)="privacyPolicy()">
+                    <ion-label>Polityka prywatności</ion-label>
+                    
+                    <ion-icon 
+                        color="primary" 
+                        slot="end" 
+                        name="chevron-forward-outline">
+                    </ion-icon>
+                </ion-item>					
+            </ion-list>
+        </ion-card-content>
+    </ion-card>
+</ion-content>

@@ -1,0 +1,19 @@
+.empty-screen {
+    &__img {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+
+        @media screen and (min-width: 0px) and (max-width: 390px) {
+            max-width: 70%;
+        } 
+        @media screen and (min-width: 391px) {
+            max-width: 95%;
+        } 
+    }
+
+    &__label {     
+        font-size: 18px;
+        text-align: center;
+    }
+}

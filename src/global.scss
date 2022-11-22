@@ -1,0 +1,149 @@
+/*
+ * App Global CSS
+ * ----------------------------------------------------------------------------
+ * Put style rules here that you want to apply globally. These styles are for
+ * the entire app and not just one component. Additionally, this file can be
+ * used as an entry point to import other CSS/Sass files to be included in the
+ * output CSS.
+ * For more information on global stylesheets, visit the documentation:
+ * https://ionicframework.com/docs/layout/global-stylesheets
+ */
+
+/* Core CSS required for Ionic components to work properly */
+@import "~@ionic/angular/css/core.css";
+
+/* Basic CSS for apps built with Ionic */
+@import "~@ionic/angular/css/normalize.css";
+@import "~@ionic/angular/css/structure.css";
+@import "~@ionic/angular/css/typography.css";
+@import '~@ionic/angular/css/display.css';
+
+/* Optional CSS utils that can be commented out */
+@import "~@ionic/angular/css/padding.css";
+@import "~@ionic/angular/css/float-elements.css";
+@import "~@ionic/angular/css/text-alignment.css";
+@import "~@ionic/angular/css/text-transformation.css";
+@import "~@ionic/angular/css/flex-utils.css";
+
+@import "./app/shared/styles-utils/spacing.scss";
+@import "./app/shared/styles-utils/text-color.scss";
+
+@import "./theme/variables.scss";
+
+@font-face{
+    font-family: Montserrat;
+    src: url('./assets/fonts/Montserrat-Regular.ttf');
+}
+
+@font-face {
+    font-family: Montserrat;
+    src: url('./assets/fonts/Montserrat-Bold.ttf');
+    font-weight: bold;
+}
+
+@font-face {
+    font-family: Montserrat;
+    src: url('./assets/fonts/Montserrat-SemiBold.ttf');
+    font-weight: 600;
+}
+
+@font-face{
+    font-family: Montserrat;
+    src: url('./assets/fonts/Montserrat-Medium.ttf');
+    font-weight: 500;
+}
+
+$primary-very-light: #f7faff;
+
+*{
+    font-family: Montserrat !important;
+}
+
+.required-asterisk{
+    color: var(--ion-color-medium);
+
+    &--invalid {
+        color: var(--ion-color-danger);
+    }
+}
+
+.page-spinner {
+    transform: scale(3);
+}
+
+
+//fix date input picker overflow of columns
+.picker-opt {
+    font-size: 20px;
+    text-overflow: unset;
+    overflow: visible;
+}
+
+//workaround to change ion-searchbar border-radius (it is in shadow dom so it cannot be reached from component scss)
+ion-searchbar {
+    .searchbar-input{
+        border-radius: 50px !important;
+    }
+}
+
+//workaround to add top border to a selected application tab
+ion-tab-bar {
+    .tab-selected {
+        position: relative;
+
+        &:after{
+            content: "";
+            border-top: 2px solid;
+            position: absolute;
+            top: 0;
+            left: 25%;
+            width: 50%;
+        }
+    }
+}
+
+.validation-error {
+    color: var(--ion-color-danger);
+}
+
+.small-modal{
+    padding-left: 30px;
+    padding-right: 30px;
+
+    &--rectangle {
+        & .modal-wrapper {
+            border-radius: 0px !important;
+        }
+    }
+
+    & .modal-wrapper{
+        border-radius: 20px;
+
+        @media screen and (min-width: 0px) and (max-width: 390px) {
+            max-height: 290px;
+        } 
+        @media screen and (min-width: 391px) {
+            max-height: 350px;
+        }       
+    }    
+
+    &:after {
+        content: "";  
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        background: black;    
+        opacity: 0.3;
+        overflow: visible;
+    }
+}
+
+.hide-on-small-screen {
+    @media screen and (min-width: 0px) and (max-width: 390px) {
+        display: none;
+    } 
+}
+

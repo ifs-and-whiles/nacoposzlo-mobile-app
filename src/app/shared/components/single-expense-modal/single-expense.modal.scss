@@ -1,0 +1,15 @@
+@import './../../styles-utils/action-toolbar.scss';
+@import './../../styles-utils/text-color.scss';
+@import './../../styles-utils/header-toolbar.scss';
+@import './../../styles-utils/content.scss';
+@import './../../styles-utils/content.scss';
+
+.show-receipt-arrow {
+    font-size: 30px;
+}
+
+.expense-grid {
+    @media screen and (min-width: 391px) {
+       margin-top: 2rem;
+    }
+}

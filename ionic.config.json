@@ -1,0 +1,7 @@
+{
+  "name": "NaCoPoszlo",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}

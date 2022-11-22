@@ -1,0 +1,8 @@
+@import "./../../../../theme/variables.scss";
+@import "./../../styles-utils/text-color.scss";
+@import "./../../styles-utils/info-label.scss";
+
+.tip-label {
+    font-size: 13px;
+    color: var(--ion-color-primary);
+}

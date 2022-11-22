@@ -1,0 +1,116 @@
+<ion-header class="ion-no-border">
+    <ion-toolbar class="header-toolbar header-toolbar--shade">
+        <ion-buttons slot="start">
+            <ion-button class="header-toolbar__btn" (click)="cancel()">
+                <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+    
+        <ion-title class="header-toolbar__title header-toolbar__title--with-icon" (click)="cancel()">
+            <span>Zarządzaj kategoriami</span>
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
+        
+<ion-content class="background-shade"> 
+    
+    <ng-container *ngIf="!tagGroups || !tagGroups.length">
+        <ion-button expand="block" class="tag-action-btn mt4 mx2" 
+            (click)="openAddCategoryModal()">
+            dodaj kategorię
+    
+            <ion-icon 
+                color="primary" 
+                slot="start" 
+                name="add-outline">
+            </ion-icon>
+        </ion-button>
+
+        <div class="mx2 mt3">
+            <app-tip-label
+                text="zawsze możesz wrócić do tego widoku klikając w <b>Więcej -> Zarządzaj Kategoriami</b>">
+            </app-tip-label> 
+        </div>
+    </ng-container>
+
+    <ion-grid class="mb1" *ngIf="tagGroups && tagGroups.length">
+        <ion-row>
+            <ion-col>
+                <ion-searchbar 
+                    debounce=0 
+                    placeholder="Szukaj"
+                    type="url"
+                    [(ngModel)]="search"
+                    (ionChange)="onSearchChange()">
+                </ion-searchbar>
+            </ion-col>
+        </ion-row>
+
+        <ion-row>
+            <ion-col>
+                <div class="tags tags--category">
+                    <app-add-tag
+                        class="tags__item"
+                        [tag]="'nowa kategoria'"
+                        [small]='0'
+                        (click)="openAddCategoryModal()">
+                    </app-add-tag>
+                </div>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+
+    <ion-grid class="mb2" *ngIf="tagGroups && tagGroups.length">
+        <ion-row>
+            <ion-col class="ion-text-center p0">
+                <app-tip-label
+                    [text]="'kliknij w kategorię aby edytować'">
+                </app-tip-label> 
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+
+    <ng-container *ngFor="let tagGroup of tagGroups">
+        <div *ngIf="tagGroup.isVisible" class="tags-card mb3">
+            <div class="edit-tags-toggle">           
+               <div class="edit-tags-toggle__content">
+                    <ion-label
+                        class="text-primary"
+                        (click)="tagGroup.isEditOn = !tagGroup.isEditOn">
+                        EDYCJA
+                    </ion-label>
+
+                    <ion-toggle [(ngModel)]="tagGroup.isEditOn"></ion-toggle>
+               </div>
+            </div>
+    
+            <ion-grid class="tags-group">    
+                <ion-row *ngFor="let tag of tagGroup.tags; let index = index">
+                    <ion-col class="py0">
+                        <div class="tags" *ngIf="!tag.addSubcategory">
+                            <app-tag
+                                [style.margin-left]="(30 * tag.level) + 10 + 'px'"
+                                class="tags__item"
+                                [class.tags__item--highlighted]="tag.isHighlighted"
+                                [tag]="tag.name + ' (' + tag.usageCount + ')'"
+                                [forceColor]="tag.color"
+                                [allowClear]="0"
+                                (click)="editTag(tagGroup,tag)">
+                            </app-tag>
+                        </div>  
+        
+                        <div class="tags tags--subcategory" *ngIf="tag.addSubcategory && tagGroup.isEditOn">
+                            <app-add-tag
+                                [style.margin-left]="(30 * tag.level) + 10 + 'px'"
+                                class="tags__item"
+                                [tag]="'nowa podkategoria'"
+                                [small]='1'
+                                (click)="openAddSubcategoryModal(tagGroup, index, tag.chain)">
+                            </app-add-tag>
+                        </div>                            
+                    </ion-col>
+                </ion-row>        
+            </ion-grid>  
+        </div>
+    </ng-container> 
+</ion-content>

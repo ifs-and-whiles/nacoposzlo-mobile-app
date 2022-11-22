@@ -1,0 +1,16 @@
+<div class="tag-list">
+    <ng-container *ngFor="let tagId of tagIds; let $index = index; let last = last; trackBy: trackTagBy;">
+        <app-tag
+            [tag]="tagsNames[tagId] ?? 'Kategoria ' + tagId"
+            [forceColor]="forceColor"
+            [configColor]="tagsColors[tagId]"
+            [allowClear]="!hideRemove"
+            (onClear)="removeTag($index)">
+        </app-tag>
+
+        <ion-icon *ngIf="!last" 
+            class="tag-list__arrow"
+            name="chevron-forward-outline">
+        </ion-icon>
+    </ng-container>
+</div>

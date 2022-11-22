@@ -1,0 +1,117 @@
+<ion-header class="ion-no-border">
+    <ion-toolbar class="header-toolbar header-toolbar--shade">   
+        <ion-title class="header-toolbar__title header-toolbar__title--centered" (click)="cancel()">
+            <span>{{!parentChain.length ? 'Dodaj kategorię' : 'Dodaj podkategorię'}}</span>
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
+        
+<ion-content class="background-shade new-tag">
+    <form>
+        <ion-grid class="px2">
+            <ion-row>
+                <ion-col class="new-tag__item-col p0">
+                    <div *ngIf="!newTag && !wasColorClicked" 
+                        class="new-tag__placeholder">
+                        {{!parentChain.length ? 'nowa kategoria' : 'nowa podkategoria'}}
+                    </div>
+
+                    <div *ngIf="!newTag && wasColorClicked" 
+                        class="new-tag__placeholder"
+                        [style.color]="newTagColor"
+                        [style.border-color]="newTagColor">
+                        {{!parentChain.length ? 'nowa kategoria' : 'nowa podkategoria'}}
+                    </div>    
+    
+                    <app-tag 
+                        *ngIf="newTag && !isNameAlreadyUsed"
+                        [big]="1"
+                        [allowClear]="0"
+                        [tag]="newTag"    
+                        [forceColor]="newTagColor"
+                        (click)="randomizeColor()">
+                    </app-tag>    
+
+                    <app-tag 
+                        *ngIf="newTag && isNameAlreadyUsed"
+                        [big]="1"
+                        [allowClear]="0"
+                        [tag]="newTag"    
+                        [forceColor]="tagsCollection.tags[alreadyUsedTagId].color">
+                    </app-tag> 
+                </ion-col>
+            </ion-row>
+    
+            <ion-row class="pt2">
+                <ion-col>
+                    <ion-item class="validation">
+                        <ion-label color="medium" position="floating" 
+                            class="validation__label"
+                            [class.validation__label--invalid]="nameInput.control.status === 'INVALID' && nameInput.control.touched">
+                            Nazwa
+                            <span class="required-asterisk">*</span>
+                        </ion-label>                           
+    
+                        <ion-input 
+                            #nameInputCtrl
+                            #nameInput="ngModel"
+                            class="validation__input"
+                            [class.validation__input--invalid]="nameInput.control.status === 'INVALID' && nameInput.control.touched"
+                            placeholder="Uzupełnij nazwę"
+                            type="text" 
+                            inputmode="text" 
+                            name="name" 
+                            clear-input=true 
+                            [(ngModel)]="newTag"
+                            (ionChange)="onNameChange()"
+                            appHideKeyboardOnEnter
+                            required>
+                        </ion-input>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+    
+            <ion-row class="pt2"
+                *ngIf="!isNameAlreadyUsed"
+                [class.hide-on-small-screen]="isNameForbidden">
+                <ion-col>
+                    <app-color-palette
+                        class="new-tag__colors"
+                        (colorChange)="onNewTagColorChange($event)">
+                    </app-color-palette>
+                </ion-col>
+            </ion-row>
+
+            <ion-row class="mt1 new-tag__error" [hidden]="!isNameForbidden">
+                <ion-col>
+                    <span class="text-danger">Ta nazwa jest już zajęta, a istniejąca kategoria nie może zostać użyta.</span>
+                </ion-col>
+            </ion-row>
+
+            <ion-row class="mt1 new-tag__info" [hidden]="isNameForbidden || !isNameAlreadyUsed">
+                <ion-col>
+                    <span class="text-primary">Wybrano istniejącą kategorię.</span>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+    </form>
+    
+</ion-content>
+
+<ion-footer> 
+	<ion-toolbar class="action-toolbar">
+		<ion-buttons class="action-toolbar__container">
+            <ion-button 
+                class="action-toolbar__btn action-toolbar__btn--green" 
+                expand="full" 
+                (click)="add()"
+                [disabled]="isNameForbidden">
+                
+				<div class="m1">
+					<span *ngIf="!isNameAlreadyUsed" class="action-toolbar__label-only">Dodaj</span>
+					<span *ngIf="isNameAlreadyUsed" class="action-toolbar__label-only">Wybierz</span>
+				</div>
+			</ion-button>			
+		</ion-buttons>	
+	</ion-toolbar>
+</ion-footer>

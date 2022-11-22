@@ -1,0 +1,8 @@
+<div class="color-palette">
+    <div *ngFor="let color of colorItems"
+        class="color-palette__item ion-activatable"
+        [style.background-color]="color.hex"
+        (click)="onColorClick(color)">
+        <ion-ripple-effect></ion-ripple-effect>
+    </div>  
+</div>     

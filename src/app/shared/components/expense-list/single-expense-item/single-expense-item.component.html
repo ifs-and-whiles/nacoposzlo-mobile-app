@@ -1,0 +1,40 @@
+<div>
+    <div class="expense__row pl1">
+        <div class="expense__name-col">
+            <div class="expense__name"
+                 [class.expense__name--corrupted]="isExpenseCorrupted()">
+                 <span *ngIf="highlightPhrase" innerHtml="{{expense.name | boldprefix: highlightPhrase}}"></span>
+                 <span *ngIf="!highlightPhrase">{{expense.name}}</span>                
+            </div>				
+        </div>
+    
+        <div class="expense__amount-col">	
+            <span *ngIf="!isInCorrectionMode" class="ion-float-right"
+                [class.expense__amount--corrupted]="expense.amount > receiptTotalAmount">
+
+                {{expense.amount | money:'include-currency'}}
+            </span>	
+            
+            <app-single-expense-money-input *ngIf="isInCorrectionMode"
+                [isCorrupted]="expense.amount > receiptTotalAmount || !expense.amount"
+                [value]="expense.amount"
+                (valueChange)="onAmountChange($event)"
+                (inputFocus)="onAmountFocus()"
+                (inputBlur)="onAmountBlur()"
+                required>
+            </app-single-expense-money-input>
+        </div>
+    </div>
+    
+    <div *ngIf="expense.tags && expense.tags.length" class="expense__row pl1 pt1">
+        <app-tag-list-read-only [tagIds]="expense.tags"></app-tag-list-read-only>
+    </div>
+    
+    <div *ngIf="!expense.tags || !expense.tags.length" class="expense__row pl1 pt1">
+        <app-no-category-tag></app-no-category-tag>
+    </div>
+
+    <div class="mt1" *ngIf="isInCorrectionMode && expense.boundingBox">
+        <canvas #canvas width="1000" height="1000" style="width: 100%; height: auto;"></canvas>
+    </div>
+</div>

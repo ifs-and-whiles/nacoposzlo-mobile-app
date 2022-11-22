@@ -1,0 +1,41 @@
+@import "./../../theme/variables.scss";
+@import "./../shared/styles-utils/sliding.scss";
+@import "./../shared/styles-utils/skeleton.scss";
+@import "./../shared/styles-utils/info-label.scss";
+@import "./../shared/styles-utils/text-color.scss";
+@import "./../shared/styles-utils/list-item.scss";
+@import "./../shared/styles-utils/disable-fog.scss";
+@import "./../shared/styles-utils/content.scss";
+@import "./../shared/styles-utils/header-toolbar.scss";
+
+.receipt {
+    &__date {
+        margin-left: -10px;
+    }
+
+    &__seller {
+        min-width: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}
+
+.date-range-btn {	
+    --box-shadow: none;
+    --ion-color-base: var(--background-shade) !important;
+    margin: 0px;
+    font-size: 16px;
+    text-transform: lowercase;
+}
+
+.skeleton-item {
+    margin-top: 13px;
+}
+
+.receipts-panel {
+    @extend .content-panel;
+
+    padding-top: 15px;
+    background: white;
+}

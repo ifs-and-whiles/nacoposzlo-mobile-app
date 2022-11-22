@@ -1,0 +1,63 @@
+.menu-card {
+    --background: white;
+    border-radius: 15px;
+
+    &__content {
+        padding-top: 0;
+        padding-bottom: 0;
+
+        &--big {
+            min-height: 150px;
+        }
+    }
+
+    &--green {
+       --background: linear-gradient(var(--background-gradient-green-first), var(--background-gradient-green-second));
+       color: var(--info-font-color);
+    }
+
+    &--red {
+        --background: linear-gradient(var(--background-gradient-red-first), var(--background-gradient-red-second));
+        color: white;
+    }
+
+    &--danger {
+        --background: var(--ion-color-danger);
+        font-weight: 600;
+        color: white;
+    }
+
+    &__title-label {
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    &__value-label {
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    &__info-label {
+        font-size: 14px;
+        font-weight: 100;
+    }
+
+    &__sell-btn-col {
+        text-align: center;
+    }
+
+    &__sell-btn {
+        font-size: 14px;
+        font-weight: bold;  
+        white-space: pre-wrap;
+        --ion-color-base: white !important;
+        --border-radius: 25px;
+        --box-shadow: 0px 0px 2px 1px rgba(0,0,0,0.1);
+    }
+}
+
+.menu-item {
+    &:last-child {        
+        --border-color: transparent;
+    }
+}

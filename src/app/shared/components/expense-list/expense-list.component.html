@@ -1,0 +1,82 @@
+<ion-list *ngIf="skeletons">
+    <ion-item *ngFor="let skeleton of skeletons" class="skeleton-item mb1">
+        <ion-grid class="pt0 pr0 pl0">
+            <ion-row class="m0">
+                <ion-col size="1" class="p0">
+                    <ion-row class="m0">
+                        <ion-col class="p0">
+                            <ion-skeleton-text animated class="skeleton-item__date"></ion-skeleton-text>
+                        </ion-col>
+                    </ion-row>
+                
+                    <ion-row class="m0">
+                        <ion-col class="p0">
+                            <ion-skeleton-text animated class="skeleton-item__date"></ion-skeleton-text>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+
+                <ion-col size="11" class="p0">
+                    <ion-row class="m0">
+                        <ion-col size="9" class="pl1 py0">
+                            <ion-skeleton-text animated class="skeleton-item__name"></ion-skeleton-text>
+                        </ion-col>
+                        <ion-col size="3" class="p0">
+                            <ion-skeleton-text animated class="skeleton-item__amount"></ion-skeleton-text>
+                        </ion-col>
+                    </ion-row>
+
+                    <ion-row class="m0">
+                        <ion-col class="pl1 pb0">
+                            <ion-skeleton-text animated class="skeleton-item__tags"></ion-skeleton-text>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>                    
+            </ion-row>                
+        </ion-grid>
+    </ion-item>
+</ion-list>
+
+<div [hidden]="skeletons">
+    <ng-container *ngFor="let expense of expenses; trackBy: trackExpenseBy">
+        <div class="sliding"
+            [class.sliding--danger]="expense.isBeingSwiped"
+            [hidden]="isExpenseHidden(expense)">
+
+            <ion-icon class="sliding__icon sliding__icon--left" name="trash-outline"></ion-icon>
+
+            <div class="pt1 expense list-item sliding__item ion-activatable"
+                [appGestures]="!isScrolling"
+                (appSwipe)="deleteExpense(expense)"  
+                (appIsSwiping)="expense.isBeingSwiped = $event"                          
+                (appLongPress)="toggleExpenseSelection(expense)">		
+
+                <div class="list-item__content">
+                    <app-selectable-item 
+                        [itemTemplate]="expenseItemTemplate"
+                        [dateUnixTimestamp]="expense.dateUnixTimestamp"
+                        [isSelected]="expense.isSelected"
+                        [name]="expense.itemId"                        
+                        (itemClick)="clickExpense(expense)"
+                        (iconClick)="toggleExpenseSelection(expense)">
+                    </app-selectable-item>
+                </div>
+
+                <ng-template #expenseItemTemplate>
+                    <app-single-expense-item 
+                        [expense]="expense"
+                        [receiptImage]="receiptImage"
+                        [receiptTotalAmount]="receiptTotalAmount"
+                        [highlightPhrase]="highlightPhrase"
+                        (amountFocused)="expense.isAmountFocused = $event"
+                        (amountChange)="onAmountChange()">                        
+                    </app-single-expense-item>
+                </ng-template>	
+                
+                <ion-ripple-effect [hidden]="expense.isAmountFocused" class="hide-on-sliding"></ion-ripple-effect>
+            </div>
+
+            <ion-icon class="sliding__icon sliding__icon--right" name="trash-outline"></ion-icon>
+        </div>
+    </ng-container>		
+</div>

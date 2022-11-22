@@ -1,0 +1,32 @@
+<div class="empty-screen">
+    <img class="empty-screen__img" src="{{imgUrl}}" />
+
+    <ion-grid *ngIf="line1 || line2 || line3">
+        <ion-row *ngIf="line1"
+            [style.fontSize]="line1FontSize">
+            <ion-col class="empty-screen__label">
+                <ion-label>
+                    {{line1}}
+                </ion-label>
+            </ion-col>
+        </ion-row>
+    
+        <ion-row *ngIf="line2">
+            <ion-col class="empty-screen__label"
+                [style.fontSize]="line2FontSize">
+                <ion-label>
+                    {{line2}}
+                </ion-label>
+            </ion-col>
+        </ion-row>
+    
+        <ion-row *ngIf="line3">
+            <ion-col class="empty-screen__label">
+                <ion-label>
+                    {{line3}}
+                </ion-label>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+</div>
+

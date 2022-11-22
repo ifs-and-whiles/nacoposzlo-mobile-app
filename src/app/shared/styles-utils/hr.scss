@@ -1,0 +1,8 @@
+@import "./../../../theme/variables.scss";
+
+.hr {
+    margin-left: 16px;
+    margin-right: 16px;
+    border-bottom: 1px solid;
+    border-color: var(--ion-color-light-shade);
+}

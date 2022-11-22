@@ -1,0 +1,162 @@
+<div class="tags p0 background-shade">
+    <div class="empty-screen__content empty-screen__content--vs-ion-content"
+        [hidden]="isKeyboardVisible || (filteredTags && filteredTags.length) || shouldShowNewTagPanel()">
+        <app-empty-screen
+            class="mt3"
+            line1="Nie masz jeszcze żadnej kategorii. Utwórz jakąś, a następnie dodaj podkategorie."
+            imgUrl="../../../../assets/images/intro_2.svg">
+        </app-empty-screen>
+    </div>
+
+    <ion-grid>
+        <ion-row class="mt1">
+            <ion-col>                        
+                <ion-searchbar class="tags__search-bar" 
+                    debounce=0 
+                    [placeholder]="getPlaceholder()"
+                    type="url"
+                    [(ngModel)]="search"
+                    (ionChange)="onSearchChange()"
+                    (keyup.enter)="addTagFromSearch()">
+                </ion-searchbar>
+            </ion-col>
+        </ion-row>
+
+        <ion-row class="mt1" *ngIf="selectedTagIds && selectedTagIds.length">
+            <ion-col>
+                <span class="tags__selected-label info-label text-medium">
+                    Wybrane kategorie
+                </span>
+            </ion-col>
+        </ion-row>
+
+        <ion-row *ngIf="selectedTagIds && selectedTagIds.length">
+            <ion-col>
+                <ion-card class="tags__card">
+                    <app-tag-list class="tags__list"
+                        [tagIds]="selectedTagIds" 
+                        [hideRemove]="0"
+                        (onRemove)="onSelectedTagRemove($event)">
+                    </app-tag-list>
+
+                    <app-suggestion-tag 
+                        *ngIf="isSuggestionTagVisible"
+                        (click)="openAddTagModal()"
+                        tag="podkategoria">
+                    </app-suggestion-tag>
+                </ion-card>                
+            </ion-col>
+        </ion-row>
+
+        <ion-row class="mt1" [hidden]="!shouldShowNewTagPanel()">
+            <ion-col>
+                <div class="tags__new-tag-section">
+                    <app-tag class="tags__new-item"
+                        [big]="1"
+                        [allowClear]="0"
+                        [tag]="'+ ' + search"    
+                        [forceColor]="newTagColor"
+                        (click)="addTagFromSearch()">
+                    </app-tag>    
+                    
+                    <app-color-palette 
+                        class="tags__colors"
+                        (colorChange)="onNewTagColorChange($event)">
+                    </app-color-palette>
+                </div>                
+            </ion-col>
+        </ion-row>
+
+        <ion-row class="mt1" *ngIf="!shouldShowNewTagPanel() && searchState == 'existing-tag'">
+            <ion-col>
+                <div class="tags__new-tag-section">
+                    <app-tag class="tags__new-item"
+                        [big]="1"
+                        [allowClear]="0"
+                        [tag]="'+ ' + exactSameTag.value"    
+                        [forceColor]="exactSameTag.color"
+                        (click)="addTagToSelected(exactSameTag.id)">
+                    </app-tag>    
+                </div>                
+            </ion-col>
+        </ion-row>
+
+        <ion-row class="mt1" 
+            *ngIf="showTagForCreation && canCreateTag" 
+            [hidden]="!isTagForbiddenToCreate(search)">
+            <ion-col>
+                <div button>
+                    <span class="text-danger">Nie można utworzyć kategorii o takiej nazwie</span>
+                </div>
+            </ion-col>
+        </ion-row>
+
+        <ion-row class="mt1" *ngIf="!shouldShowNewTagPanel() && canCreateTag && (!filteredTags || !filteredTags.length)">
+            <ion-col>
+                <app-add-tag
+                    class="tags__item"
+                    [tag]="'przygotuj swoje kategorie'"
+                    (click)="goToManageTags()">
+                </app-add-tag>
+            </ion-col>
+        </ion-row>
+
+        <ion-row class="mt1" *ngIf="!shouldShowNewTagPanel() && canCreateTag && !(!filteredTags || !filteredTags.length)">
+            <ion-col>
+                <app-add-tag
+                    class="tags__item"
+                    [tag]="selectedTagIds.length ? 'nowa podkategoria' : 'nowa kategoria'"
+                    (click)="openAddTagModal()">
+                </app-add-tag>
+            </ion-col>
+        </ion-row>        
+
+        <ion-row class="mt1" *ngIf="isAnySuggestedTagVisible">
+            <ion-col>
+                <span class="tags__suggested-label info-label text-medium">
+                    Proponowane
+                </span>
+            </ion-col>
+        </ion-row>
+
+        <ion-row *ngIf="isAnySuggestedTagVisible">
+            <ion-col>
+                <ng-container *ngFor="let tag of suggestedTags; trackBy: trackTagBy">
+                    <app-tag
+                        class="tags__item"
+                        [hidden]="!tag.isVisible" 
+                        [tag]="tag.value"
+                        [forceColor]="tag.color"
+                        [medium]="1"
+                        [allowClear]="0"    
+                        (click)="addTagToSelected(tag.id)">
+                    </app-tag>
+                </ng-container>
+            </ion-col>
+        </ion-row>
+
+        <ion-row class="mt1" *ngIf="isAnyRestOfTagVisible">
+            <ion-col>
+                <span class="tags__suggested-label info-label text-medium">
+                    Pozostałe
+                </span>
+            </ion-col>
+        </ion-row>
+
+        <ion-row *ngIf="isAnyRestOfTagVisible">
+            <ion-col>
+                <ng-container *ngFor="let tag of restOfTags; trackBy: trackTagBy">
+                    <app-tag
+                        class="tags__item"
+                        [hidden]="!tag.isVisible" 
+                        [tag]="tag.value"
+                        [forceColor]="tag.color"
+                        [medium]="1"
+                        [allowClear]="0"    
+                        (click)="addTagToSelected(tag.id)">
+                    </app-tag>
+                </ng-container>
+            </ion-col>
+        </ion-row>
+    </ion-grid>    
+</div>

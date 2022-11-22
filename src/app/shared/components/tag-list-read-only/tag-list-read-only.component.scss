@@ -1,0 +1,18 @@
+@import "./../../../../theme/variables.scss";
+@import "./../../styles-utils/tag-base.scss";
+
+.tag-list-read-only {
+	display: block;
+
+	&__arrow { 
+		margin-bottom: -4px;
+        margin-left: -5px;
+        margin-right: -2px;
+        font-size: 16px;
+		color: var(--ion-color-medium-tint);
+	}
+}
+
+.tag-read-only {
+	@extend .tag-base;
+}

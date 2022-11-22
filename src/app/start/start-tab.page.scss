@@ -1,0 +1,119 @@
+@import "./../../theme/variables.scss";
+@import "./../shared/styles-utils/text-color.scss";
+@import "./../shared/styles-utils/buttons.scss";
+@import "./../shared/styles-utils/info-label.scss";
+@import "./../shared/styles-utils/content.scss";
+@import "./../shared/styles-utils/header-toolbar.scss";
+@import "./../shared/styles-utils/summary.scss";
+
+.current-month-total-amount {
+	margin-top: 7px;
+	font-size: 26px;
+	font-weight: 400;
+}
+
+.date-range-btn {	
+    --box-shadow: none;
+	--ion-color-base: var(--background-shade) !important;
+	margin: 0px;
+	font-size: 16px;
+	text-transform: lowercase;
+}
+
+.months-range-btn {	
+    --box-shadow: none;
+	--ion-color-base: var(--background-shade) !important;
+	margin: 0px;
+	font-size: 16px;
+	text-transform: lowercase;
+
+	&__text {		
+		color: var(--info-font-color);
+	}
+
+	&__icon {		
+		color: var(--info-font-color);
+	}
+}
+
+.details-label {
+	margin-left: 25px;
+}
+
+.metrics-view {
+	padding-top: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
+	padding-bottom: 40px;
+}
+
+.comparison-view {	
+	@extend .content-panel;
+	background: white;
+	padding: 0 15px;
+
+
+
+	&__chart-label {
+		text-transform: uppercase;		
+	}
+
+	&__adapt-chart-btn {
+		--box-shadow: none;
+		--ion-color-base: white !important;
+		margin: 0px;
+		font-size: 16px;
+		text-transform: lowercase;
+	}
+
+	&__tag {
+		display: inline-block;
+		margin-right: 5px;
+        margin-bottom: 5px;
+        word-break: break-all;
+
+		&--skipped {
+			opacity: 0.2;
+		}
+	}
+}
+
+.swiper-slide {
+	width: 45%;
+}
+
+.swiper-wrapper {
+	transition-timing-function: ease-out;
+}
+
+.segment-btn {
+	color: black !important;
+	height: 35px;
+	min-height: 35px;    
+    --indicator-color: var(--ion-color-primary) ;
+    --indicator-height: 4px;
+}
+
+.segments {
+	padding-left: 30px;
+	padding-right: 30px;
+}
+
+.loader {
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    background-color: var(--background-shade);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &__spinner {
+        color: var(--ion-color-medium-tint);
+        width: 50px;
+        height: 50px;
+    }
+}

@@ -1,0 +1,36 @@
+.skeleton-item {
+    margin-top: 18px;
+
+    &__date {
+        width: 80%;
+        line-height: 13px;
+    }
+
+    &__name {
+        width: 70%;
+        line-height: 16px;
+        margin-left: 7px;
+    }
+
+    &__subtitle {
+        width: 70%;
+        line-height: 13px;
+        margin-left: 7px;
+    }
+
+    &__amount {
+        width: 100%;
+        line-height: 16px;
+    }
+
+    &__tags {
+        width: 40%;
+        line-height: 25px;
+        border-radius: 15px;
+        margin-left: 7px;
+    }
+
+    &:first-child {
+        margin-top: 6px;
+    }
+}

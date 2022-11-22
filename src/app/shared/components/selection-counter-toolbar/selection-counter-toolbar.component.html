@@ -1,0 +1,11 @@
+<ion-toolbar class="header-toolbar header-toolbar--shade">
+	<ion-buttons slot="start">
+		<ion-button class="header-toolbar__btn" (click)="onBackClick()">
+			<ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
+		</ion-button>
+	</ion-buttons>
+
+	<ion-title class="header-toolbar__title header-toolbar__title--with-icon" (click)="onBackClick()">
+	  <span>Wybrano: {{counter}}</span>
+	</ion-title>
+</ion-toolbar>

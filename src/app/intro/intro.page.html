@@ -1,0 +1,90 @@
+<ion-content class="intro background-shade">
+	<ion-grid class="p0">
+		<ion-row>
+			<ion-col>
+				<div class="intro__skip-box">
+					<a [routerLink]="" class="intro__skip-link" (click)="startUsing()">Pomiń</a>
+				</div>				
+			</ion-col>
+		</ion-row>
+
+		<ion-row>
+			<ion-col class="p0">
+				<ion-slides pager="true" [options]="slideOpts" #introSlides
+					(ionSlideDidChange)="onSlideChange()">
+
+					<ion-slide>
+						<ion-grid class="p0">							
+							<ion-row>
+								<ion-col class="p2">
+									<img src="../../assets/images/intro_1.svg">
+									<div class="pt3 intro__text">
+										Fotografuj paragony aby szybko wprowadzić nowe wydatki
+									</div>								
+								</ion-col>
+							</ion-row>
+						</ion-grid>
+					</ion-slide>
+			
+					<ion-slide>
+						<ion-grid class="p0">							
+							<ion-row>
+								<ion-col class="p2">
+									<img src="../../assets/images/intro_2.svg">
+									<div class="pt3 intro__text">
+										Twórz i zagnieżdżaj kategorie wedle własnych potrzeb
+									</div>								
+								</ion-col>
+							</ion-row>
+						</ion-grid>
+					</ion-slide>
+			
+					<ion-slide>
+						<ion-grid class="p0">							
+							<ion-row>
+								<ion-col class="p2">
+									<img src="../../assets/images/intro_3.svg">
+									<div class="pt3 intro__text">
+										Przeglądaj podsumowania aby dokładnie wiedzieć Na&nbsp;Co&nbsp;Poszło!
+									</div>								
+								</ion-col>
+							</ion-row>
+						</ion-grid>
+					</ion-slide>
+				</ion-slides>
+			</ion-col>
+		</ion-row>
+	</ion-grid>	
+</ion-content>
+
+<ion-footer> 
+	<ion-toolbar class="action-toolbar">
+		<ion-buttons class="action-toolbar__container">
+			<ion-button  *ngIf="isNextButtonVisible" 
+                class="action-toolbar__btn action-toolbar__btn--green" 
+                expand="full" 
+				(click)="showNext()">
+
+				<div class="m1">
+					<span class="action-toolbar__label-only">Dalej</span>
+				</div>
+			</ion-button>
+
+			<ion-button  *ngIf="!isNextButtonVisible" 
+                class="action-toolbar__btn action-toolbar__btn--green" 
+                expand="full" 
+				(click)="startUsing()">
+
+				<div class="m1">
+					<span *ngIf="!isOpenedFromMorePage" class="action-toolbar__label-only">
+						Zaczynajmy!
+					</span>
+
+					<span *ngIf="isOpenedFromMorePage" class="action-toolbar__label-only">
+						Wróć do aplikacji
+					</span>
+				</div>
+			</ion-button>
+		</ion-buttons>	
+	</ion-toolbar>
+</ion-footer>

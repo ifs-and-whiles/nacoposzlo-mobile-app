@@ -1,0 +1,43 @@
+<ion-item class="validation"
+    [class.background-shade]="useBackgroundShade">
+    <ion-label *ngIf="label"
+        [color]="labelColor"  
+        [position]="labelPosition"
+        class="validation__label"
+        [class.validation__label--invalid]="moneyInput.control.status === 'INVALID' && (moneyInput.dirty || moneyInput.touched)">
+        {{label}}
+
+        <span *ngIf="required" 
+            class="required-asterisk"            
+            [class.required-asterisk--invalid]="moneyInput.control.status === 'INVALID' && (moneyInput.dirty || moneyInput.touched)">
+            *
+        </span>
+    </ion-label>
+
+    <ion-input 
+        #moneyInputCtrl
+        #moneyInput="ngModel"
+        class="validation__input suffix-parent"
+        [class.validation__input--invalid]="moneyInput.control.status === 'INVALID' && (moneyInput.dirty || moneyInput.touched)"
+        [placeholder]="placeholder"
+        [style]="inputStyle"
+        type="text" 
+        [name]="name"
+        inputmode="decimal" 
+        [(ngModel)]="_value"
+        (ionChange)="onChange()"
+        (ionFocus)="onFocus($event)"
+        (ionBlur)="onBlur($event)"
+        (keyup.enter)="onKeyUpEnter()"
+        appMoney
+        [required]="required">
+    </ion-input>
+
+    <span *ngIf="_value != null && _value != ''"
+        class="validation__input suffix"
+        [class.validation__input--invalid]="moneyInput.control.status === 'INVALID' && (moneyInput.dirty || moneyInput.touched)"
+        [style]="inputStyle"
+        [style.left]="(_suffixOffset + 2) + 'px'">
+        zł
+    </span>
+</ion-item>

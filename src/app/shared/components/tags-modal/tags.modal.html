@@ -1,0 +1,68 @@
+<ion-header class="ion-no-border">
+	<ion-toolbar class="header-toolbar header-toolbar--shade">
+		<ion-buttons slot="start">
+			<ion-button class="header-toolbar__btn" (click)="cancel()">
+				<ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
+			</ion-button>
+		</ion-buttons>		
+
+		<ion-title class="header-toolbar__title header-toolbar__title--with-icon" (click)="cancel()">
+			<span>Wybór kategorii</span>
+		</ion-title>
+
+		<ion-buttons slot="end">
+			<app-network-icon></app-network-icon>
+
+            <ion-button class="sort-btn" (click)="onChangeSortMethod()">
+                <fa-icon *ngIf="sortMethod == 0" class="sort-btn__icon" [icon]="faSortAmountDown"></fa-icon>
+                <fa-icon *ngIf="sortMethod == 1" class="sort-btn__icon" [icon]="faSortAlphaDown"></fa-icon>
+            </ion-button>
+
+            <ion-button 
+                (click)="goToManageTags()">
+
+                <ion-icon 
+                    slot="icon-only" 
+                    name="cog-outline">
+                </ion-icon>
+			</ion-button>
+		</ion-buttons>	
+	</ion-toolbar>
+</ion-header>
+        
+<ion-content class="background-shade">
+    <app-tags-selector 
+        [canCreateTag]="1"
+        [sortMethod]="sortMethod"
+        [selectedTagIds]="selectedTagIds"
+		(searchStateChange)="onSearchStateChange($event)">        
+    </app-tags-selector>
+</ion-content>	 
+
+<ion-footer> 
+	<ion-toolbar class="action-toolbar">
+		<ion-buttons class="action-toolbar__container">
+			<ion-button 
+				*ngIf="searchState == 'empty' || searchState == 'forbidden-tag'" 
+				class="action-toolbar__btn action-toolbar__btn--green" 
+				expand="full" 
+				(click)="ok()">
+
+				<div class="m1">
+					<span class="action-toolbar__label-only">Wybierz</span>
+				</div>
+			</ion-button>
+
+			<ion-button 
+				*ngIf="searchState != 'empty' && searchState != 'forbidden-tag'" 
+				class="action-toolbar__btn action-toolbar__btn--green" 
+				expand="full" 
+				(click)="add()">
+
+				<div class="m1">
+					<span class="action-toolbar__label-only">Dodaj</span>
+				</div>
+			</ion-button>			
+		</ion-buttons>	
+	</ion-toolbar>
+</ion-footer>

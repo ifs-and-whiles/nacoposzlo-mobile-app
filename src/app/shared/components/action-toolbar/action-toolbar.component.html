@@ -1,0 +1,24 @@
+<ion-toolbar class="action-toolbar">	
+    <ion-buttons class="action-toolbar__container">
+        <ion-button *ngIf="deleteVisible" class="action-toolbar__btn" (click)="onDeleteClick()">
+            <div class="m1">
+                <ion-icon class="action-toolbar__icon" name="trash-outline"></ion-icon><br>
+                <span class="action-toolbar__label">Usuń</span>
+            </div>
+        </ion-button>
+        
+        <ion-button *ngIf="tagVisible" class="action-toolbar__btn" (click)="onTagClick()">
+            <div class="m1">
+                <ion-icon class="action-toolbar__icon" name="pricetags-outline"></ion-icon><br>
+                <span class="action-toolbar__label">Kategoryzuj</span>
+            </div>
+        </ion-button>
+
+        <ion-button *ngIf="editVisible" class="action-toolbar__btn" (click)="onEditClick()">
+            <div class="m1">
+                <ion-icon class="action-toolbar__icon" name="create-outline"></ion-icon><br>
+                <span class="action-toolbar__label">Edytuj</span>
+            </div>
+        </ion-button>
+    </ion-buttons>	
+</ion-toolbar>

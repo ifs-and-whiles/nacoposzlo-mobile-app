@@ -1,0 +1,10 @@
+@import "./../../../../theme/variables.scss";
+@import "./../../styles-utils/text-color.scss";
+@import "./../../styles-utils/info-label.scss";
+
+.month-selector {
+    &__month {
+        font-weight: 600;
+		font-size: 20px;
+    }
+}

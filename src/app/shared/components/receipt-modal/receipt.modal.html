@@ -1,0 +1,205 @@
+<ion-header class="ion-no-border" #header>
+	<ion-toolbar class="header-toolbar header-toolbar--shade" *ngIf="!selectedItemsCount">
+		<ion-buttons slot="start">
+			<ion-button class="header-toolbar__btn" (click)="cancel()">
+				<ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
+			</ion-button>
+		</ion-buttons>	
+
+		<ion-title class="header-toolbar__title header-toolbar__title--with-icon" (click)="cancel()">
+			<span>Paragon</span>
+			<ion-spinner *ngIf="isProcessingProductChange" class="ion-float-right" name="dots"></ion-spinner>
+		</ion-title>
+
+		<ion-buttons slot="end">
+			<app-network-icon></app-network-icon>
+			
+			<ion-button 
+				[class.text-primary]="filters.tagIds.length"
+				(click)="showFilters()" 
+				[disabled]="this.isLoading">
+
+                <ion-icon 
+                    slot="icon-only" 
+                    name="options-outline">
+                </ion-icon>
+			</ion-button>
+		</ion-buttons>
+	</ion-toolbar>
+
+	<app-selection-counter-toolbar *ngIf="selectedItemsCount"
+		[count]="selectedItemsCount"
+		(dismiss)="unselectAll()">	  
+	</app-selection-counter-toolbar>
+</ion-header>
+
+<ion-content [scrollEvents]="true" 
+    (ionScrollStart)="onScrollStart()" 
+    (ionScrollEnd)="onScrollEnd()" 
+    [fullscreen]="true" 
+    appHideHeader 
+    [header]="header"
+    [hideHeaderDisable]="selectedItemsCount">
+
+	<ion-grid class="background-shade pt3 pb2 details">
+		<ion-row>
+			<ion-col>
+				<ion-row *ngIf="receipt">
+					<ion-col class="p0 expense-col details__date">
+						<span>{{receipt.dateUnixTimestamp | timestamp:'long-date'}}</span>
+					</ion-col>
+				</ion-row>
+		
+				<ion-row *ngIf="receipt" class="mt1">
+					<ion-col class="p0 expense-col details__seller">
+						<span>{{receipt.seller}}</span>
+					</ion-col>
+				</ion-row>
+		
+				<ion-row *ngIf="receipt" class="mt1">
+					<ion-col class="p0 expense-col details__amount">
+						<span>{{receipt.totalAmount | money:'include-currency'}}</span>
+					</ion-col>
+				</ion-row>
+			</ion-col>
+			
+			<ion-col size="4" class="p0 action-col">
+                <ion-button color="light" class="ml1 action-btn details__edit-btn"
+					(click)="showPhoto()">				
+					<ion-icon slot="icon-only" color="primary" name="image-outline"></ion-icon>
+				</ion-button>
+
+				<ion-button color="light" class="action-btn details__edit-btn"
+					(click)="editDetails()">				
+                    <ion-icon slot="icon-only" color="primary" name="create-outline"></ion-icon>
+				</ion-button>
+			</ion-col>
+		</ion-row>
+	
+		<ion-row class="mt2 filter"
+			[hidden]="!filters.tagIds.length">
+			<ion-col class="ion-text-center p0">
+				<ion-card class="filter__card">
+					<div>
+                        <span class="filter__title">
+                            Kategorie:
+                        </span>
+    
+                        <app-tag-list class="filter__tags"
+                            [tagIds]="filters.tagIds" 
+                            [hideRemove]="0"
+                            (onRemove)="reloadOnFiltersChange()">
+                        </app-tag-list>
+                    </div>
+
+                    <ion-button 
+                        (click)="clearTagFilter()" 
+                        class="filter__icon-btn">
+                        <ion-icon 
+                            slot="icon-only" 
+                            name="close-outline">
+                        </ion-icon>
+                    </ion-button>
+				</ion-card>      
+			</ion-col>
+		</ion-row>	
+	</ion-grid>
+
+	<ion-grid class="list">
+		<ion-row>
+			<ion-col class="p0">
+				<ion-button *ngIf="(expenses && expenses.length) || isLoading" color="light" class="list__select-all-btn"
+					(click)="selectAll()">				
+					<span class="text-primary">{{areAllSelected ? 'Odznacz wszystkie' : 'Zaznacz wszystkie'}}</span>
+				</ion-button>
+			</ion-col>
+		</ion-row>
+
+		<ion-row class="sum mt1" *ngIf="!isLoading && isProductsSumWrong()">
+			<ion-col class="p0">
+				<div class="ion-float-right sum__container">
+					<span class="sum__text text-danger">
+						Suma produktów: &nbsp; {{productsSum | money:'include-currency'}}
+					</span>
+
+					<span *ngIf="isProductsSumNotEnough()" class="text-medium info-label ion-float-right">
+						Za mało o: &nbsp; {{(receipt.totalAmount - productsSum) | money:'include-currency'}}
+					</span>
+
+					<span *ngIf="isProductsSumTooMuch()" class="text-medium info-label ion-float-right">
+						Za dużo o: &nbsp; {{(productsSum - receipt.totalAmount) | money:'include-currency'}}
+					</span>
+				</div>
+			</ion-col>
+		</ion-row>
+
+		<ion-row class="can-be-disabled"
+			[class.can-be-disabled--disabled]="isDateBeingChanged || isReceiptBeingConfirmed || isReceiptImageLoading">
+		
+			<ion-col class="p0">
+				<app-expense-list
+					[expenses]="expenses"
+					[hideReceiptLink]="1"
+					[skeletonCount]="skeletonCount"
+					[expenseFilter]="expenseFilter"
+					[isInCorrectionMode]="isInCorrectionMode"
+					[receiptImage]="receiptImage"
+					[receiptTotalAmount]="receipt.totalAmount"
+					[isScrolling]="isScrolling"
+					(selectionChange)="onExpensesSelectionChange($event)"
+					(expensesChange)="onExpensesChange()">
+				</app-expense-list>
+			</ion-col>
+		</ion-row>
+
+		<ion-row class="mt2 mb2 add-expense-row">
+			<ion-col class="p0">
+				<ion-button color="light" class="action-btn"
+					(click)="addExpense()">				
+					<span class="text-primary">Dodaj wydatek</span>
+				</ion-button>
+			</ion-col>
+		</ion-row>
+
+		<ion-row class="mt3" [hidden]="(expenses && expenses.length) || isLoading">
+			<ion-col class="p0">
+				<div>
+					<app-empty-screen
+						line1="Do tego paragonu nie ma przypisanych żadnych wydatków" 
+						imgUrl="../../assets/images/list_of_expenses.svg">
+					</app-empty-screen>
+				</div>
+			</ion-col>
+		</ion-row>
+	</ion-grid> 
+
+    <div *ngIf="isReceiptImageLoading" class="loader">            
+        <ion-spinner class="loader__spinner"></ion-spinner>
+    </div>
+</ion-content>
+
+<ion-footer *ngIf="selectedItemsCount"> 
+	<app-action-toolbar
+		(delete)="deleteSelected()"
+		(tag)="tagSelected()"
+		(edit)="editSelected()">
+	</app-action-toolbar>
+</ion-footer>
+
+<ion-footer *ngIf="!selectedItemsCount && isInCorrectionMode"> 
+	<ion-toolbar class="action-toolbar">
+		<ion-buttons class="action-toolbar__container">
+			<ion-button 
+				class="action-toolbar__btn action-toolbar__btn--green" 
+				expand="full" 
+				[disabled]="!isReceiptCorrect() || isLoading || isReceiptBeingConfirmed"
+				(click)="confirmReceipt()">
+                
+				<div class="m1">
+					<span class="action-toolbar__label-only">Zatwierdź paragon</span>
+				</div>
+			</ion-button>
+		</ion-buttons>	
+	</ion-toolbar>
+</ion-footer>
+

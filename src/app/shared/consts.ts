@@ -1,0 +1,1 @@
+export const DELETE_CANCEL_TOAST_DURATION = 3000;

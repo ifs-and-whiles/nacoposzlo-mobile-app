@@ -1,0 +1,33 @@
+.action-btn {
+    --ion-color-base: white !important;
+    --border-radius: 25px;
+    --box-shadow: 0px 0px 2px 1px rgba(0,0,0,0.1);
+}
+
+.text-btn {
+    --box-shadow: none;
+    --ion-color-base: white !important;
+
+    &--shade {        
+        --ion-color-base: var(--background-shade) !important;
+    }
+
+    &--primary {
+        span {
+            color: var(--ion-color-primary);
+        }
+
+        ion-icon {
+            color: var(--ion-color-primary);
+        }
+    }
+
+    &--medium {
+        font-weight: 500;
+    }
+
+    &--icon-only {
+        --padding-start: 10px;
+        --padding-end: 10px;
+    }
+}

@@ -1,0 +1,22 @@
+@import "./../../styles-utils/tag-base.scss";
+
+.tag {    
+    @extend .tag-base;
+
+    &__remove-btn {
+        &::before {
+            content: " x";
+            cursor: pointer;
+            font-weight: bold;
+            color: white;
+        }
+    }
+	
+	&--big {
+		font-size: 16px;
+    }
+    
+    &--medium {
+		font-size: 14px;
+	}
+}

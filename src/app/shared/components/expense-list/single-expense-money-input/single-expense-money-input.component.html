@@ -1,0 +1,17 @@
+<ion-input 
+    #moneyInput="ngModel"
+    class="validation__input single-expense-money-input"
+    [class.validation__input--invalid]="moneyInput.control.status === 'INVALID'"
+    [class.single-expense-money-input--corrupted]="isCorrupted"
+    [placeholder]="isFocused ? '' : 'Uzupełnij'"
+    type="text" 
+    name="amount"
+    inputmode="decimal" 
+    [(ngModel)]="valueStr"
+    (ionChange)="onChange()"
+    (click)="onClick(); $event.stopPropagation()"
+    (ionBlur)="onBlur()"
+    appMoney
+    appHideKeyboardOnEnter
+    [required]="required">
+</ion-input>

@@ -1,0 +1,25 @@
+.suggestions {
+    border: 1px solid;
+    padding: 10px;
+    position: absolute;
+    overflow-y: scroll;
+    z-index: 2;
+    background: white;
+    left: 0px;
+    right: 0px;
+    max-height: 30vh;
+    box-shadow: 1px 1px 3px 2px rgb(0 0 0 / 10%);
+    margin: 0px 5px 5px 5px;
+
+    &__item {    
+        margin-bottom: 5px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.13);
+        padding-top: 10px;
+        padding-bottom: 5px;
+    }
+
+    &__counter {
+        float: right;
+        opacity: 0.5;
+    }
+}
